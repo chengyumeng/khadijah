@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os/user"
 	"os"
 	"path"
 	"encoding/json"
