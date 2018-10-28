@@ -8,6 +8,8 @@ import (
 
 var Version string = ""
 
+var GlobalOption *Option
+
 var BaseURL string = "http://open.qihoo.cloud"
 
 var UserConfigDir string = ""

@@ -5,6 +5,7 @@ import (
 
 	"github.com/chengyumeng/khadijah/cmd"
 	"github.com/chengyumeng/khadijah/pkg/config"
+	"fmt"
 )
 
 var (
@@ -13,7 +14,13 @@ var (
 
 func main() {
 	config.Version = Version
-	err := cmd.RootCmd.Execute()
+	opt, err := config.LoadOption()
+	if err != nil {
+		fmt.Println(err)
+	}
+	config.GlobalOption = opt
+
+	err = cmd.RootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}

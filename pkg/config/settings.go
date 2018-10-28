@@ -11,6 +11,7 @@ type Option struct {
 }
 
 func LoadOption()(opt *Option,err error){
+	opt = new(Option)
 	f, err := os.Open(path.Join(UserConfigDir,TokenFile))
 	if err != nil {
 		return nil,err
