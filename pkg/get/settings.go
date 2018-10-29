@@ -39,3 +39,25 @@ type Namespace struct {
 	UpdateTime *time.Time `json:"updateTime"`
 	User string `json:"user"`
 }
+
+type Page struct {
+	PageNum int64 `json:"pageNo"`
+	PageSize int64 `json:"pageSize"`
+	TotalPage int64 `json:"totalPage"`
+	TotalCount int64 `json:"totalCount"`
+}
+
+type AppBody struct {
+	Data struct {
+		Page
+		Apps []App `json:"list"`
+	}
+}
+
+type App struct {
+	Id int64 `json:"id"`
+	Name string `json:"name"`
+	Namespace string `json:"namespaceName"`
+	User string `json:"user"`
+	CreateTime *time.Time `json:"createTime"`
+}
