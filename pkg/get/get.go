@@ -12,7 +12,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-const pageSize int = 1024*1024 // 单页显示，不分页
+const pageSize int = 1024 * 1024 // 单页显示，不分页
 
 type GetProxy struct {
 	Option Option
@@ -40,8 +40,9 @@ func (g *GetProxy) Get() {
 		g.GetPod(StatefulsetType)
 		g.GetPod(DaemonsetType)
 		g.GetPod(CronjobType)
+	case ServiceType:
+		g.GetService()
 	default:
-		fmt.Printf("Hello world!")
 	}
 }
 
@@ -100,24 +101,22 @@ func (g *GetProxy) getApp() {
 
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Id", "Name", "Namespace", "User", "CreateTime"})
-	for _,id := range nsIds {
+	for _, id := range nsIds {
 		data := g.getAppBody(id)
 		if data == nil {
 			continue
 		}
 
-
 		for _, v := range data.Data.Apps {
 			table.Append([]string{strconv.Itoa(int(v.Id)), v.Name, v.Namespace, v.User, v.CreateTime.String()})
 		}
-
 
 	}
 	table.Render()
 }
 
 func (g *GetProxy) getAppBody(nsId int64) *AppBody {
-	url := fmt.Sprintf("%s/%s/%d/%s?pageSize=%d", config.BaseURL, "api/v1/namespaces",nsId,"apps",pageSize)
+	url := fmt.Sprintf("%s/%s/%d/%s?pageSize=%d", config.BaseURL, "api/v1/namespaces", nsId, "apps", pageSize)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, _ := http.DefaultClient.Do(req)
@@ -156,16 +155,16 @@ func (g *GetProxy) GetPod(podType string) {
 		}
 	}
 	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Id", "Name","Type","APP", "Namespace", "User", "CreateTime"})
+	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	exist := false
-	for _,nsId := range nsIds {
+	for _, nsId := range nsIds {
 		if app := g.getAppBody(nsId); app != nil {
-			for _,a := range app.Data.Apps {
+			for _, a := range app.Data.Apps {
 				if g.Option.App == "" || g.Option.App == a.Name {
-					data := g.getPodBody(a.Id,podType)
-					for _,pod := range data.Data.Pods {
+					data := g.getPodBody(a.Id, podType)
+					for _, pod := range data.Data.Pods {
 						exist = true
-						table.Append([]string{strconv.Itoa(int(pod.Id)), pod.Name,podType, pod.App.Name,pod.App.NSMetaData.Name, pod.User, pod.CreateTime.String()})
+						table.Append([]string{strconv.Itoa(int(pod.Id)), pod.Name, podType, pod.App.Name, pod.App.NSMetaData.Name, pod.User, pod.CreateTime.String()})
 					}
 				}
 			}
@@ -177,8 +176,8 @@ func (g *GetProxy) GetPod(podType string) {
 	}
 }
 
-func (g *GetProxy) getPodBody(appId int64,podType string) *PodBody {
-	url := fmt.Sprintf("%s/%s/%d/%ss?pageSize=%d", config.BaseURL, "api/v1/apps",appId,podType,pageSize)
+func (g *GetProxy) getPodBody(appId int64, podType string) *PodBody {
+	url := fmt.Sprintf("%s/%s/%d/%ss?pageSize=%d", config.BaseURL, "api/v1/apps", appId, podType, pageSize)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, _ := http.DefaultClient.Do(req)
@@ -194,6 +193,68 @@ func (g *GetProxy) getPodBody(appId int64,podType string) *PodBody {
 	data := new(PodBody)
 	err = json.Unmarshal(body, &data)
 	if err != nil {
+		panic(err)
+	}
+	return data
+}
+
+func (g *GetProxy) GetService() {
+	nsIds := []int64{}
+	ns := g.getNamespaceBody()
+	if g.Option.Namespace != "" {
+		for _, n := range ns.Data.Namespaces {
+			if n.Name == g.Option.Namespace {
+				nsIds = append(nsIds, n.Id)
+			}
+		}
+		if len(nsIds) == 0 {
+			panic("ERROR")
+		}
+	} else {
+		for _, n := range ns.Data.Namespaces {
+			nsIds = append(nsIds, n.Id)
+		}
+	}
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
+	exist := false
+	for _, nsId := range nsIds {
+		if app := g.getAppBody(nsId); app != nil {
+			for _, a := range app.Data.Apps {
+				if g.Option.App == "" || g.Option.App == a.Name {
+					data := g.getServiceBody(a.Id)
+					for _, svc := range data.Data.Services {
+						exist = true
+						table.Append([]string{strconv.Itoa(int(svc.Id)), svc.Name, ServiceType, svc.App.Name, svc.App.NSMetaData.Name, svc.User, svc.CreateTime.String()})
+					}
+				}
+
+			}
+		}
+	}
+	if exist {
+		table.Render()
+	}
+}
+
+func (g *GetProxy) getServiceBody(appId int64) *ServiceBody {
+	url := fmt.Sprintf("%s/%s/%d/%ss?pageSize=%d", config.BaseURL, "api/v1/apps", appId, ServiceType, pageSize)
+	fmt.Println(url)
+	req, _ := http.NewRequest(http.MethodGet, url, nil)
+	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
+	res, _ := http.DefaultClient.Do(req)
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
+	if res.StatusCode != http.StatusOK {
+		return nil
+	}
+	data := new(ServiceBody)
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		println(string(body))
 		panic(err)
 	}
 	return data

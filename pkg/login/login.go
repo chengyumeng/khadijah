@@ -1,12 +1,12 @@
 package login
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
-	"encoding/json"
 
 	"github.com/chengyumeng/khadijah/pkg/config"
 )
@@ -41,7 +41,7 @@ func Login(opt Option) {
 }
 
 func save(token string) error {
-	f, err := os.Create(path.Join(config.UserConfigDir,config.TokenFile))
+	f, err := os.Create(path.Join(config.UserConfigDir, config.TokenFile))
 	if err != nil {
 		return err
 	} else {

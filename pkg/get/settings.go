@@ -63,7 +63,7 @@ type App struct {
 	Namespace  string     `json:"namespaceName"`
 	User       string     `json:"user"`
 	CreateTime *time.Time `json:"createTime"`
-	NSMetaData Namespace `json:"namespace"`
+	NSMetaData Namespace  `json:"namespace"`
 }
 
 type PodBody struct {
@@ -80,5 +80,22 @@ type Pod struct {
 	CreateTime *time.Time `json:"createTime"`
 	UpdateTime *time.Time `json:"updateTime"`
 	User       string     `json:"user"`
-	App        App       `json:"app"`
+	App        App        `json:"app"`
+}
+
+type ServiceBody struct {
+	Data struct {
+		Page
+		Services []Service `json:"list"`
+	} `json:"data"`
+}
+
+type Service struct {
+	Id         int64      `json:"id"`
+	Name       string     `json:"name"`
+	Metadata   string     `json:"metadata"`
+	CreateTime *time.Time `json:"createTime"`
+	UpdateTime *time.Time `json:"updateTime"`
+	User       string     `json:"user"`
+	App        App        `json:"app"`
 }

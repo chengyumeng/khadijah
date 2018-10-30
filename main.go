@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
+	"fmt"
 	"github.com/chengyumeng/khadijah/cmd"
 	"github.com/chengyumeng/khadijah/pkg/config"
-	"fmt"
 )
 
 var (

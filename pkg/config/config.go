@@ -1,8 +1,8 @@
 package config
 
 import (
-	"os/user"
 	"os"
+	"os/user"
 	"path"
 )
 
@@ -16,7 +16,7 @@ var UserConfigDir string = ""
 var TokenFile string = ".token"
 
 func init() {
-	user,err := user.Current()
+	user, err := user.Current()
 	if err != nil {
 		panic(err)
 	}

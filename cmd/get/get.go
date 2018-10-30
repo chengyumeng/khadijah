@@ -1,8 +1,8 @@
 package get
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/chengyumeng/khadijah/pkg/get"
+	"github.com/spf13/cobra"
 )
 
 var option get.Option

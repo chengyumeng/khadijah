@@ -1,8 +1,8 @@
 package login
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/chengyumeng/khadijah/pkg/login"
+	"github.com/spf13/cobra"
 )
 
 var option login.Option
