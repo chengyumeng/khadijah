@@ -1,8 +1,8 @@
 package exec
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/chengyumeng/khadijah/pkg/exec"
+	"github.com/spf13/cobra"
 )
 
 var ExecCmd = &cobra.Command{

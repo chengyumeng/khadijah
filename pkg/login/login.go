@@ -50,3 +50,13 @@ func save(token string) error {
 	}
 	return nil
 }
+
+func Clear() error {
+	f, err := os.Create(path.Join(config.UserConfigDir, config.TokenFile))
+	if err != nil {
+		return err
+	} else {
+		defer f.Close()
+	}
+	return nil
+}
