@@ -5,7 +5,7 @@ import (
 	"github.com/chengyumeng/khadijah/cmd/get"
 	"github.com/chengyumeng/khadijah/cmd/log"
 	"github.com/chengyumeng/khadijah/cmd/login"
-	"github.com/chengyumeng/khadijah/cmd/ssh"
+	"github.com/chengyumeng/khadijah/cmd/exec"
 	"github.com/spf13/cobra"
 )
 
@@ -23,6 +23,6 @@ func init() {
 	RootCmd.AddCommand(get.GetCmd)
 	RootCmd.AddCommand(describe.DescribeCmd)
 	RootCmd.AddCommand(log.LogCmd)
-	RootCmd.AddCommand(ssh.ExecCmd)
+	RootCmd.AddCommand(exec.ExecCmd)
 	RootCmd.AddCommand(login.LoginCmd)
 }
