@@ -10,6 +10,7 @@ import (
 
 	"github.com/chengyumeng/khadijah/pkg/config"
 	"github.com/olekukonko/tablewriter"
+	"github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
 const pageSize int = 1024 * 1024 // 单页显示，不分页
@@ -31,8 +32,11 @@ func (g *GetProxy) Get() {
 	case AppType:
 		g.getApp()
 	case DeploymentType:
+		g.GetPod(DeploymentType)
 	case StatefulsetType:
+		g.GetPod(StatefulsetType)
 	case DaemonsetType:
+		g.GetPod(DaemonsetType)
 	case CronjobType:
 		g.GetPod(g.Option.Resource)
 	case PodType:
@@ -53,13 +57,13 @@ func (g *GetProxy) getNamespace() {
 	table.SetHeader([]string{"Id", "Name", "User", "CreateTime", "UpdateTime"})
 
 	for _, v := range data.Data.Namespaces {
-		table.Append([]string{strconv.Itoa(int(v.Id)), v.User, v.Name, v.CreateTime.String(), v.UpdateTime.String()})
+		table.Append([]string{strconv.Itoa(int(v.Id)),  v.Name, v.User,v.CreateTime.String(), v.UpdateTime.String()})
 	}
 	table.Render()
 }
 
 func (g *GetProxy) getNamespaceBody() *NamespaceBody {
-	url := fmt.Sprintf("%s/%s", config.BaseURL, "/currentuser")
+	url := fmt.Sprintf("%s/%s", config.BaseURL, "currentuser")
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 
@@ -67,7 +71,7 @@ func (g *GetProxy) getNamespaceBody() *NamespaceBody {
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		panic(err)
+		log.AppLogger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
 		fmt.Println(string(body))
@@ -76,7 +80,7 @@ func (g *GetProxy) getNamespaceBody() *NamespaceBody {
 	data := new(NamespaceBody)
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		panic(err)
+		log.AppLogger.Warning(err)
 	}
 	return data
 }
@@ -91,7 +95,8 @@ func (g *GetProxy) getApp() {
 			}
 		}
 		if len(nsIds) == 0 {
-			panic("ERROR")
+			log.AppLogger.Warning("NS ERROR")
+			return
 		}
 	} else {
 		for _, n := range ns.Data.Namespaces {
@@ -123,7 +128,7 @@ func (g *GetProxy) getAppBody(nsId int64) *AppBody {
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		panic(err)
+		log.AppLogger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
 		fmt.Println(string(body))
@@ -132,7 +137,7 @@ func (g *GetProxy) getAppBody(nsId int64) *AppBody {
 	data := new(AppBody)
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		panic(err)
+		log.AppLogger.Warning(err)
 	}
 	return data
 }
@@ -147,7 +152,7 @@ func (g *GetProxy) GetPod(podType string) {
 			}
 		}
 		if len(nsIds) == 0 {
-			panic("ERROR")
+			log.AppLogger.Warning("No NS")
 		}
 	} else {
 		for _, n := range ns.Data.Namespaces {
@@ -184,7 +189,7 @@ func (g *GetProxy) getPodBody(appId int64, podType string) *PodBody {
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		panic(err)
+		log.AppLogger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
 		fmt.Println(string(body))
@@ -193,39 +198,39 @@ func (g *GetProxy) getPodBody(appId int64, podType string) *PodBody {
 	data := new(PodBody)
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		panic(err)
+		log.AppLogger.Warning(err)
 	}
 	return data
 }
 
 func (g *GetProxy) GetService() {
-	nsIds := []int64{}
+	nsl := []Namespace{}
 	ns := g.getNamespaceBody()
 	if g.Option.Namespace != "" {
 		for _, n := range ns.Data.Namespaces {
 			if n.Name == g.Option.Namespace {
-				nsIds = append(nsIds, n.Id)
+				nsl = append(nsl, n)
 			}
 		}
-		if len(nsIds) == 0 {
-			panic("ERROR")
+		if len(nsl) == 0 {
+			log.AppLogger.Error("No NS")
 		}
 	} else {
 		for _, n := range ns.Data.Namespaces {
-			nsIds = append(nsIds, n.Id)
+			nsl = append(nsl,n)
 		}
 	}
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	exist := false
-	for _, nsId := range nsIds {
-		if app := g.getAppBody(nsId); app != nil {
+	for _, ns := range nsl {
+		if app := g.getAppBody(ns.Id); app != nil {
 			for _, a := range app.Data.Apps {
 				if g.Option.App == "" || g.Option.App == a.Name {
 					data := g.getServiceBody(a.Id)
 					for _, svc := range data.Data.Services {
 						exist = true
-						table.Append([]string{strconv.Itoa(int(svc.Id)), svc.Name, ServiceType, svc.App.Name, svc.App.NSMetaData.Name, svc.User, svc.CreateTime.String()})
+						table.Append([]string{strconv.Itoa(int(svc.Id)), svc.Name, ServiceType, a.Name, ns.Name, svc.User, svc.CreateTime.String()})
 					}
 				}
 
@@ -239,14 +244,13 @@ func (g *GetProxy) GetService() {
 
 func (g *GetProxy) getServiceBody(appId int64) *ServiceBody {
 	url := fmt.Sprintf("%s/%s/%d/%ss?pageSize=%d", config.BaseURL, "api/v1/apps", appId, ServiceType, pageSize)
-	fmt.Println(url)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, _ := http.DefaultClient.Do(req)
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		panic(err)
+		log.AppLogger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
 		return nil
@@ -254,8 +258,7 @@ func (g *GetProxy) getServiceBody(appId int64) *ServiceBody {
 	data := new(ServiceBody)
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		println(string(body))
-		panic(err)
+		log.AppLogger.Warning(err)
 	}
 	return data
 }

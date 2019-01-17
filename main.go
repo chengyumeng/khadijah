@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"fmt"
 	"github.com/chengyumeng/khadijah/cmd"
 	"github.com/chengyumeng/khadijah/pkg/config"
+	utilslog "github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
 var (
@@ -14,14 +14,14 @@ var (
 
 func main() {
 	config.Version = Version
-	opt, err := config.LoadOption()
+	err := config.LoadOption()
 	if err != nil {
-		fmt.Println(err)
+		utilslog.AppLogger.Error("Error Load Option")
 	}
-	config.GlobalOption = opt
 
 	err = cmd.RootCmd.Execute()
 	if err != nil {
+		utilslog.AppLogger.Error("")
 		os.Exit(1)
 	}
 }

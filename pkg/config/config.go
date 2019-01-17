@@ -2,29 +2,21 @@ package config
 
 import (
 	"os"
-	"os/user"
 	"path"
+	"encoding/json"
 )
 
-var Version string = ""
-
-var GlobalOption *Option
-
-var BaseURL string = "http://open.qihoo.cloud"
-
-var UserConfigDir string = ""
-var TokenFile string = ".token"
-
-func init() {
-	user, err := user.Current()
+func Save() (err error){
+	f, err := os.Create(path.Join(UserConfigDir, ConfigFile))
 	if err != nil {
-		panic(err)
-	}
-	UserConfigDir = path.Join(user.HomeDir, ".khadijah")
-	if _, err := os.Stat(UserConfigDir); os.IsNotExist(err) {
-		err = os.Mkdir(UserConfigDir, 0744)
+		return err
+	} else {
+		defer f.Close()
+		data, err := json.MarshalIndent(GlobalOption, "", "  ")
 		if err != nil {
-			panic(err)
+			return err
 		}
+		f.Write(data)
 	}
+	return nil
 }
