@@ -1,0 +1,34 @@
+package model
+
+import (
+	"net/http"
+	"io/ioutil"
+	"fmt"
+	"encoding/json"
+
+	"github.com/chengyumeng/khadijah/pkg/utils/log"
+	"github.com/chengyumeng/khadijah/pkg/config"
+)
+
+
+func GetAppBody(nsId int64) *AppBody {
+	url := fmt.Sprintf("%s/%s/%d/%s?pageSize=%d", config.BaseURL, "api/v1/namespaces", nsId, "apps", PageSize)
+	req, _ := http.NewRequest(http.MethodGet, url, nil)
+	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
+	res, _ := http.DefaultClient.Do(req)
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.AppLogger.Warning(err)
+	}
+	if res.StatusCode != http.StatusOK {
+		fmt.Println(string(body))
+		return nil
+	}
+	data := new(AppBody)
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		log.AppLogger.Warning(err)
+	}
+	return data
+}
