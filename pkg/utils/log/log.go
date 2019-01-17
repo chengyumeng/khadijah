@@ -1,19 +1,24 @@
 package log
+
 import (
-	"os"
 	log "github.com/Sirupsen/logrus"
 	"github.com/fatih/color"
+	"os"
 )
+
 var (
 	CmdLogger = log.New()
 	AppLogger = log.New()
 )
+
 func init() {
 	CmdLogger.Formatter = &CmdFormatter{}
 	CmdLogger.Out = os.Stdout
 	AppLogger.Out = os.Stderr
 }
+
 type CmdFormatter struct{}
+
 func (f *CmdFormatter) Format(entry *log.Entry) ([]byte, error) {
 	var colorFunc func(string, ...interface{}) string
 	switch entry.Level {

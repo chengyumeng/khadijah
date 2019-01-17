@@ -6,6 +6,17 @@ import (
 
 const PageSize int = 1024 * 1024 // 单页显示，不分页
 
+const (
+	NamespaceType   string = "namespace"
+	AppType         string = "app"
+	DeploymentType  string = "deployment"
+	DaemonsetType   string = "daemonset"
+	CronjobType     string = "cronjob"
+	StatefulsetType string = "statefulset"
+	PodType         string = "pod"
+	ServiceType     string = "service"
+)
+
 type User struct {
 	Id      int64  `json:"id"`
 	Name    string `json:"name"`
@@ -49,7 +60,6 @@ type Pod struct {
 	App        App        `json:"app"`
 }
 
-
 type Service struct {
 	Id         int64      `json:"id"`
 	Name       string     `json:"name"`
@@ -60,9 +70,7 @@ type Service struct {
 	App        App        `json:"app"`
 }
 
-
-
 type Metadata struct {
-	Namespace string `json:"namespace"`
-	Clusters []string `json:"clusters"`
+	Namespace string   `json:"namespace"`
+	Clusters  []string `json:"clusters"`
 }

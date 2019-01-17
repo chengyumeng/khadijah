@@ -41,7 +41,7 @@ func SetUser(u *User) (err error) {
 	return Save()
 }
 
-func SetToken(t string)(err error) {
+func SetToken(t string) (err error) {
 	GlobalOption.Token = t
 	return Save()
 }

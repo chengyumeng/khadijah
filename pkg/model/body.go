@@ -14,16 +14,12 @@ type NamespaceBody struct {
 	} `json:"data"`
 }
 
-
-
 type PodBody struct {
 	Data struct {
 		Page
 		Pods []Pod `json:"list"`
 	} `json:"data"`
 }
-
-
 
 type ServiceBody struct {
 	Data struct {

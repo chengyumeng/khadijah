@@ -10,7 +10,7 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
-func Login(opt Option) (err error){
+func Login(opt Option) (err error) {
 	url := fmt.Sprintf("%s/login/db?username=%s&password=%s", config.BaseURL, opt.Username, opt.Password)
 
 	req, _ := http.NewRequest("POST", url, nil)
@@ -36,7 +36,7 @@ func Login(opt Option) (err error){
 	} else {
 		return err
 	}
-	if err := config.SetUser( &config.User{opt.Username}); err != nil {
+	if err := config.SetUser(&config.User{opt.Username}); err != nil {
 		return err
 	}
 	return nil
@@ -48,7 +48,7 @@ func Clear() error {
 	} else {
 		return err
 	}
-	if err := config.SetUser( &config.User{ ""}); err != nil {
+	if err := config.SetUser(&config.User{""}); err != nil {
 		return err
 	}
 	return nil

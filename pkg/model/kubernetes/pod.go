@@ -1,17 +1,16 @@
 package kubernetes
 
 import (
-	"net/http"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/chengyumeng/khadijah/pkg/config"
+	"github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
-
-func GetResourceBody(resource string,appId int64,namespace string,cluster string) []byte {
-	url := fmt.Sprintf("%s/api/v1/kubernetes/apps/%d/deployments/%s/namespaces/%s/clusters/%s", config.BaseURL, appId,resource,namespace,cluster)
+func GetResourceBody(resource string, appId int64, namespace string, cluster string, resourceType string) []byte {
+	url := fmt.Sprintf("%s/api/v1/kubernetes/apps/%d/%ss/%s/namespaces/%s/clusters/%s", config.BaseURL, appId, resourceType, resource, namespace, cluster)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, _ := http.DefaultClient.Do(req)

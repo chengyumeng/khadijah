@@ -1,15 +1,14 @@
 package model
 
 import (
-	"net/http"
-	"io/ioutil"
-	"fmt"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/chengyumeng/khadijah/pkg/config"
+	"github.com/chengyumeng/khadijah/pkg/utils/log"
 )
-
 
 func GetNamespaceBody() *NamespaceBody {
 	url := fmt.Sprintf("%s/%s", config.BaseURL, "currentuser")

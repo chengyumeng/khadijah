@@ -5,9 +5,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/olekukonko/tablewriter"
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/chengyumeng/khadijah/pkg/model"
+	"github.com/chengyumeng/khadijah/pkg/utils/log"
+	"github.com/olekukonko/tablewriter"
 )
 
 const pageSize int = 1024 * 1024 // 单页显示，不分页
@@ -24,24 +24,24 @@ func NewProxy(opt Option) GetProxy {
 
 func (g *GetProxy) Get() {
 	switch g.Option.Resource {
-	case NamespaceType:
+	case model.NamespaceType:
 		g.getNamespace()
-	case AppType:
+	case model.AppType:
 		g.getApp()
-	case DeploymentType:
-		g.GetPod(DeploymentType)
-	case StatefulsetType:
-		g.GetPod(StatefulsetType)
-	case DaemonsetType:
-		g.GetPod(DaemonsetType)
-	case CronjobType:
+	case model.DeploymentType:
+		g.GetPod(model.DeploymentType)
+	case model.StatefulsetType:
+		g.GetPod(model.StatefulsetType)
+	case model.DaemonsetType:
+		g.GetPod(model.DaemonsetType)
+	case model.CronjobType:
 		g.GetPod(g.Option.Resource)
-	case PodType:
-		g.GetPod(DeploymentType)
-		g.GetPod(StatefulsetType)
-		g.GetPod(DaemonsetType)
-		g.GetPod(CronjobType)
-	case ServiceType:
+	case model.PodType:
+		g.GetPod(model.DeploymentType)
+		g.GetPod(model.StatefulsetType)
+		g.GetPod(model.DaemonsetType)
+		g.GetPod(model.CronjobType)
+	case model.ServiceType:
 		g.GetService()
 	default:
 	}
@@ -54,7 +54,7 @@ func (g *GetProxy) getNamespace() {
 	table.SetHeader([]string{"Id", "Name", "User", "CreateTime", "UpdateTime"})
 
 	for _, v := range data.Data.Namespaces {
-		table.Append([]string{strconv.Itoa(int(v.Id)),  v.Name, v.User,v.CreateTime.String(), v.UpdateTime.String()})
+		table.Append([]string{strconv.Itoa(int(v.Id)), v.Name, v.User, v.CreateTime.String(), v.UpdateTime.String()})
 	}
 	table.Render()
 }
@@ -147,20 +147,20 @@ func (g *GetProxy) GetService() {
 		}
 	} else {
 		for _, n := range ns.Data.Namespaces {
-			nsl = append(nsl,n)
+			nsl = append(nsl, n)
 		}
 	}
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	exist := false
 	for _, ns := range nsl {
-		if app :=model.GetAppBody(ns.Id); app != nil {
+		if app := model.GetAppBody(ns.Id); app != nil {
 			for _, a := range app.Data.Apps {
 				if g.Option.App == "" || g.Option.App == a.Name {
 					data := model.GetServiceBody(a.Id)
 					for _, svc := range data.Data.Services {
 						exist = true
-						table.Append([]string{strconv.Itoa(int(svc.Id)), svc.Name, ServiceType, a.Name, ns.Name, svc.User, svc.CreateTime.String()})
+						table.Append([]string{strconv.Itoa(int(svc.Id)), svc.Name, model.ServiceType, a.Name, ns.Name, svc.User, svc.CreateTime.String()})
 					}
 				}
 

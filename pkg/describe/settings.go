@@ -1,8 +1,9 @@
 package describe
 
 type Option struct {
-	Resource  string
-	Namespace string
-	App       string
-	Name      string
+	resource   string
+	Namespace  string
+	Output     string
+	Deployment string
+	Cluster    string
 }

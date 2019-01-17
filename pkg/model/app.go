@@ -1,15 +1,14 @@
 package model
 
 import (
-	"net/http"
-	"io/ioutil"
-	"fmt"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/chengyumeng/khadijah/pkg/config"
+	"github.com/chengyumeng/khadijah/pkg/utils/log"
 )
-
 
 func GetAppBody(nsId int64) *AppBody {
 	url := fmt.Sprintf("%s/%s/%d/%s?pageSize=%d", config.BaseURL, "api/v1/namespaces", nsId, "apps", PageSize)

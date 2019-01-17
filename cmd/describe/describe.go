@@ -1,8 +1,10 @@
 package describe
 
 import (
-	"github.com/spf13/cobra"
+	"fmt"
+
 	"github.com/chengyumeng/khadijah/pkg/describe"
+	"github.com/spf13/cobra"
 )
 
 var option describe.Option
@@ -17,7 +19,8 @@ var DescribeCmd = &cobra.Command{
 }
 
 func init() {
-	DescribeCmd.Flags().StringVarP(&option.Resource, "resource", "r", "", "Resource Type")
 	DescribeCmd.Flags().StringVarP(&option.Namespace, "namespace", "n", "", "")
-	DescribeCmd.Flags().StringVarP(&option.App, "app", "a", "", "")
+	DescribeCmd.Flags().StringVarP(&option.Deployment, "deployment", "d", "", "")
+	DescribeCmd.Flags().StringVarP(&option.Output, "output", "o", "json", fmt.Sprintf(describe.JSON, describe.YAML, describe.PRETTY))
+	DescribeCmd.Flags().StringVarP(&option.Cluster, "cluster", "c", "", "")
 }

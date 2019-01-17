@@ -1,13 +1,13 @@
 package model
 
 import (
-	"fmt"
-	"net/http"
-	"io/ioutil"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/chengyumeng/khadijah/pkg/config"
+	"github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
 func GetServiceBody(appId int64) *ServiceBody {

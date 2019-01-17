@@ -1,12 +1,12 @@
 package config
 
 import (
+	"encoding/json"
 	"os"
 	"path"
-	"encoding/json"
 )
 
-func Save() (err error){
+func Save() (err error) {
 	f, err := os.Create(path.Join(UserConfigDir, ConfigFile))
 	if err != nil {
 		return err
