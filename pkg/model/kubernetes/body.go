@@ -23,3 +23,9 @@ type IngressBody struct {
 		extensionsv1beta1.Ingress
 	} `json:"data"`
 }
+
+type ConfigmapBody struct {
+	Data struct {
+		ConfigMap
+	} `json:"data"`
+}
