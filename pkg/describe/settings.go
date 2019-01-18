@@ -7,5 +7,8 @@ type Option struct {
 	Deployment  string
 	Daemontset  string
 	Statefulset string
+	Service     string
+	Ingress     string
+	Configmap   string
 	Cluster     string
 }

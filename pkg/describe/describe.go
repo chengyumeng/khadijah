@@ -11,11 +11,17 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/utils/stringobj"
 	"github.com/ghodss/yaml"
 	"github.com/olekukonko/tablewriter"
+	"strings"
 )
 
 const YAML = "yaml"
 const JSON = "json"
 const PRETTY = "pretty"
+
+var (
+	DeploymentHeader = []string{"Name", "Namespace", "Cluster", "Labels", "Containers", "Replicas", "Message"}
+	ServiceHeader    = []string{"Name", "Namespace", "Cluster", "Labels", "Type", "ClusterIP", "EXTERNAL-IP", "Ports", "SELECTOR"}
+)
 
 type DescribeProxy struct {
 	Option Option
@@ -37,6 +43,9 @@ func (g *DescribeProxy) Describe() {
 	} else if g.Option.Statefulset != "" {
 		g.Option.resource = model.StatefulsetType
 		g.showResourceState(g.Option.Statefulset)
+	} else if g.Option.Service != "" {
+		g.Option.resource = model.ServiceType
+		g.showResourceState(g.Option.Service)
 	}
 }
 
@@ -49,6 +58,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 		}
 	}
 	tb := [][]string{}
+	var header []string
 	for _, ns := range nslist {
 		kns := new(model.Metadata)
 		err := json.Unmarshal([]byte(ns.Metadata), &kns)
@@ -68,31 +78,66 @@ func (g *DescribeProxy) showResourceState(name string) {
 				case JSON:
 					fmt.Println(string(data))
 				case PRETTY:
-					obj := new(kubernetes.DeploymentBody)
-					err := json.Unmarshal(data, &obj)
-					if err != nil {
-						log.AppLogger.Error(err)
+					switch g.Option.resource {
+					case model.DeploymentType:
+					case model.DaemonsetType:
+					case model.StatefulsetType:
+						tb = append(tb, g.createDeploymentLine(data, cluster))
+						header = DeploymentHeader
+					case model.ServiceType:
+						tb = append(tb, g.createServiceLine(data, cluster))
+						header = ServiceHeader
 					}
-					ic := make(map[string]string)
-					for _, c := range obj.Data.Spec.Template.Spec.Containers {
-						ic[c.Name] = c.Image
-					}
-					rc := fmt.Sprintf("%d/%d", obj.Data.Status.AvailableReplicas, obj.Data.Status.Replicas)
-					msg := make(map[string]string)
-					for _, c := range obj.Data.Status.Conditions {
-						msg[c.LastUpdateTime.Local().String()] = c.Message
-					}
-					tb = append(tb, []string{obj.Data.Name, obj.Data.Namespace, cluster, stringobj.Map2list(obj.Data.Labels), stringobj.Map2list(ic), rc, stringobj.Map2list(msg)})
 				}
 			}
 		}
 	}
 	if len(tb) > 0 {
-		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"Name", "Namespace", "Cluster", "Labels", "Containers", "Replicas", "Message"})
-		table.SetRowLine(true)
-		table.SetRowSeparator("-")
-		table.AppendBulk(tb)
-		table.Render()
+		g.printTable(header, tb)
 	}
+}
+
+func (g *DescribeProxy) printTable(header []string, lines [][]string) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader(header)
+	table.SetRowLine(true)
+	table.SetRowSeparator("-")
+	table.AppendBulk(lines)
+	table.Render()
+}
+
+func (g *DescribeProxy) createDeploymentLine(data []byte, cluster string) []string {
+	obj := new(kubernetes.DeploymentBody)
+	err := json.Unmarshal(data, &obj)
+	if err != nil {
+		log.AppLogger.Error(err)
+	}
+	ic := make(map[string]string)
+	for _, c := range obj.Data.Spec.Template.Spec.Containers {
+		ic[c.Name] = c.Image
+	}
+	rc := fmt.Sprintf("%d/%d", obj.Data.Status.AvailableReplicas, obj.Data.Status.Replicas)
+	msg := make(map[string]string)
+	for _, c := range obj.Data.Status.Conditions {
+		msg[c.LastUpdateTime.Local().String()] = c.Message
+	}
+	return []string{obj.Data.Name, obj.Data.Namespace, cluster, stringobj.Map2list(obj.Data.Labels), stringobj.Map2list(ic), rc, stringobj.Map2list(msg)}
+}
+
+func (g *DescribeProxy) createServiceLine(data []byte, cluster string) []string {
+	obj := new(kubernetes.ServiceBody)
+	err := json.Unmarshal(data, &obj)
+	if err != nil {
+		log.AppLogger.Error(err)
+	}
+	ps := []string{}
+	for _, port := range obj.Data.Spec.Ports {
+		ps = append(ps, fmt.Sprintf("%d:%d/%s", port.Port, port.TargetPort.IntVal, port.Protocol))
+	}
+	return []string{obj.Data.Name,
+		obj.Data.Namespace, cluster,
+		stringobj.Map2list(obj.Data.Labels),
+		fmt.Sprintf("%v", obj.Data.Spec.Type),
+		obj.Data.Spec.ClusterIP, strings.Join(obj.Data.Spec.ExternalIPs, ","),
+		strings.Join(ps, ","), stringobj.Map2list(obj.Data.Spec.Selector)}
 }
