@@ -15,6 +15,8 @@ const (
 	StatefulsetType string = "statefulset"
 	PodType         string = "pod"
 	ServiceType     string = "service"
+	IngressType     string = "ingresse"
+	ConfigmapType   string = "configmap"
 )
 
 type User struct {

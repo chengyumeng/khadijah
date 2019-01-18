@@ -3,6 +3,7 @@ package kubernetes
 import (
 	"k8s.io/api/apps/v1beta1"
 	"k8s.io/api/core/v1"
+	extensionsv1beta1 "k8s.io/api/extensions/v1beta1"
 )
 
 type DeploymentBody struct {
@@ -14,5 +15,11 @@ type DeploymentBody struct {
 type ServiceBody struct {
 	Data struct {
 		v1.Service
+	} `json:"data"`
+}
+
+type IngressBody struct {
+	Data struct {
+		extensionsv1beta1.Ingress
 	} `json:"data"`
 }

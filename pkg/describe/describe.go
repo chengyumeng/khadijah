@@ -21,6 +21,7 @@ const PRETTY = "pretty"
 var (
 	DeploymentHeader = []string{"Name", "Namespace", "Cluster", "Labels", "Containers", "Replicas", "Message"}
 	ServiceHeader    = []string{"Name", "Namespace", "Cluster", "Labels", "Type", "ClusterIP", "EXTERNAL-IP", "Ports", "SELECTOR"}
+	IngressHeader    = []string{"Name", "Namespace", "Cluster", "Labels", "HOSTS"}
 )
 
 type DescribeProxy struct {
@@ -46,6 +47,9 @@ func (g *DescribeProxy) Describe() {
 	} else if g.Option.Service != "" {
 		g.Option.resource = model.ServiceType
 		g.showResourceState(g.Option.Service)
+	} else if g.Option.Ingress != "" {
+		g.Option.resource = model.IngressType
+		g.showResourceState(g.Option.Ingress)
 	}
 }
 
@@ -85,8 +89,11 @@ func (g *DescribeProxy) showResourceState(name string) {
 						tb = append(tb, g.createDeploymentLine(data, cluster))
 						header = DeploymentHeader
 					case model.ServiceType:
-						tb = append(tb, g.createServiceLine(data, cluster))
 						header = ServiceHeader
+						tb = append(tb, g.createServiceLine(data, cluster))
+					case model.IngressType:
+						header = IngressHeader
+						tb = append(tb, g.createIngressLine(data, cluster))
 					}
 				}
 			}
@@ -140,4 +147,19 @@ func (g *DescribeProxy) createServiceLine(data []byte, cluster string) []string 
 		fmt.Sprintf("%v", obj.Data.Spec.Type),
 		obj.Data.Spec.ClusterIP, strings.Join(obj.Data.Spec.ExternalIPs, ","),
 		strings.Join(ps, ","), stringobj.Map2list(obj.Data.Spec.Selector)}
+}
+
+func (g *DescribeProxy) createIngressLine(data []byte, cluster string) []string {
+	obj := new(kubernetes.IngressBody)
+	err := json.Unmarshal(data, &obj)
+	if err != nil {
+		log.AppLogger.Error(err)
+	}
+	hosts := []string{}
+	for _, r := range obj.Data.Spec.Rules {
+		hosts = append(hosts, r.Host)
+	}
+	return []string{obj.Data.Name,
+		obj.Data.Namespace, cluster,
+		stringobj.Map2list(obj.Data.Labels), strings.Join(hosts, ",")}
 }
