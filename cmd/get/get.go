@@ -17,7 +17,13 @@ var GetCmd = &cobra.Command{
 }
 
 func init() {
-	GetCmd.Flags().StringVarP(&option.Resource, "resource", "r", "", "Resource Type")
-	GetCmd.Flags().StringVarP(&option.Namespace, "namespace", "n", "", "")
+	GetCmd.Flags().StringVarP(&option.NS, "ns", "n", "", "")
 	GetCmd.Flags().StringVarP(&option.App, "app", "a", "", "")
+	GetCmd.Flags().BoolVarP(&option.Deployment, "deployment", "d", false, "")
+	GetCmd.Flags().BoolVarP(&option.Daemonset, "daemonset", "", false, "")
+	GetCmd.Flags().BoolVarP(&option.Statefulset, "statefulset", "", false, "")
+	GetCmd.Flags().BoolVarP(&option.Service, "service", "s", false, "")
+	GetCmd.Flags().BoolVarP(&option.Cronjob, "cronjob", "c", false, "")
+	GetCmd.Flags().BoolVarP(&option.Namespace, "namespace", "", false, "")
+	GetCmd.Flags().BoolVarP(&option.Application, "application", "", false, "")
 }

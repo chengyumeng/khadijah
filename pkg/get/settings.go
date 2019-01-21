@@ -1,7 +1,15 @@
 package get
 
 type Option struct {
-	Resource  string
-	Namespace string
-	App       string
+	resource    string
+	Deployment  bool
+	Daemonset   bool
+	Statefulset bool
+	Pod         bool
+	Cronjob     bool
+	Service     bool
+	Application bool
+	Namespace   bool
+	NS          string
+	App         string
 }

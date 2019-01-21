@@ -23,27 +23,25 @@ func NewProxy(opt Option) GetProxy {
 }
 
 func (g *GetProxy) Get() {
-	switch g.Option.Resource {
-	case model.NamespaceType:
-		g.getNamespace()
-	case model.AppType:
-		g.getApp()
-	case model.DeploymentType:
-		g.GetPod(model.DeploymentType)
-	case model.StatefulsetType:
-		g.GetPod(model.StatefulsetType)
-	case model.DaemonsetType:
-		g.GetPod(model.DaemonsetType)
-	case model.CronjobType:
-		g.GetPod(g.Option.Resource)
-	case model.PodType:
+	if g.Option.Pod {
 		g.GetPod(model.DeploymentType)
 		g.GetPod(model.StatefulsetType)
 		g.GetPod(model.DaemonsetType)
 		g.GetPod(model.CronjobType)
-	case model.ServiceType:
+	} else if g.Option.Deployment {
+		g.GetPod(model.DeploymentType)
+	} else if g.Option.Daemonset {
+		g.GetPod(model.DaemonsetType)
+	} else if g.Option.Statefulset {
+		g.GetPod(model.StatefulsetType)
+	} else if g.Option.Cronjob {
+		g.GetPod(model.CronjobType)
+	} else if g.Option.Service {
 		g.GetService()
-	default:
+	} else if g.Option.Application {
+		g.getApp()
+	} else if g.Option.Namespace {
+		g.getNamespace()
 	}
 }
 
@@ -62,9 +60,9 @@ func (g *GetProxy) getNamespace() {
 func (g *GetProxy) getApp() {
 	nsIds := []int64{}
 	ns := model.GetNamespaceBody()
-	if g.Option.Namespace != "" {
+	if g.Option.NS != "" {
 		for _, n := range ns.Data.Namespaces {
-			if n.Name == g.Option.Namespace {
+			if n.Name == g.Option.NS {
 				nsIds = append(nsIds, n.Id)
 			}
 		}
@@ -97,9 +95,9 @@ func (g *GetProxy) getApp() {
 func (g *GetProxy) GetPod(podType string) {
 	nsIds := []int64{}
 	ns := model.GetNamespaceBody()
-	if g.Option.Namespace != "" {
+	if g.Option.NS != "" {
 		for _, n := range ns.Data.Namespaces {
-			if n.Name == g.Option.Namespace {
+			if n.Name == g.Option.NS {
 				nsIds = append(nsIds, n.Id)
 			}
 		}
@@ -136,9 +134,9 @@ func (g *GetProxy) GetPod(podType string) {
 func (g *GetProxy) GetService() {
 	nsl := []model.Namespace{}
 	ns := model.GetNamespaceBody()
-	if g.Option.Namespace != "" {
+	if g.Option.NS != "" {
 		for _, n := range ns.Data.Namespaces {
-			if n.Name == g.Option.Namespace {
+			if n.Name == g.Option.NS {
 				nsl = append(nsl, n)
 			}
 		}
