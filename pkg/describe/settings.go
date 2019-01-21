@@ -10,5 +10,6 @@ type Option struct {
 	Service     string
 	Ingress     string
 	Configmap   string
+	Pod         string
 	Cluster     string
 }

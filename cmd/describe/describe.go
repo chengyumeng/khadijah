@@ -20,6 +20,7 @@ var DescribeCmd = &cobra.Command{
 
 func init() {
 	DescribeCmd.Flags().StringVarP(&option.Namespace, "namespace", "n", "", "")
+	DescribeCmd.Flags().StringVarP(&option.Pod, "pod", "", "", "")
 	DescribeCmd.Flags().StringVarP(&option.Deployment, "deployment", "d", "", "")
 	DescribeCmd.Flags().StringVarP(&option.Daemontset, "daemontset", "", "", "")
 	DescribeCmd.Flags().StringVarP(&option.Statefulset, "statefulset", "", "", "")

@@ -29,3 +29,7 @@ type ConfigmapBody struct {
 		ConfigMap
 	} `json:"data"`
 }
+
+type PodBody struct {
+	Data []*Pod `json:"data"`
+}

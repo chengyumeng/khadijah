@@ -1,6 +1,8 @@
 package kubernetes
 
 import (
+	"time"
+
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -42,4 +44,20 @@ type ObjectMeta struct {
 	// created. It is not guaranteed to be set in happens-before order across separate operations.
 	// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 	CreationTimestamp metaV1.Time `json:"creationTimestamp,omitempty"`
+}
+
+type Pod struct {
+	Name            string            `json:"name,omitempty"`
+	Namespace       string            `json:"namespace,omitempty"`
+	ContainerStatus []ContainerStatus `json:"containerStatus,omitempty"`
+	State           string            `json:"state,omitempty"`
+	PodIp           string            `json:"podIp,omitempty"`
+	NodeName        string            `json:"nodeName,omitempty"`
+	StartTime       time.Time         `json:"startTime,omitempty"`
+	Labels          map[string]string `json:"labels,omitempty"`
+}
+
+type ContainerStatus struct {
+	Name         string `json:"name,omitempty"`
+	RestartCount int32  `json:"restartCount"`
 }

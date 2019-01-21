@@ -19,7 +19,7 @@ const JSON = "json"
 const PRETTY = "pretty"
 
 var (
-	DeploymentHeader = []string{"Name", "Namespace", "Cluster", "Labels", "Containers", "Replicas", "Message"}
+	DeploymentHeader = []string{"Name", "Namespace", "Cluster", "Labels", "Containers", "Replicas", "Message", "Pods"}
 	ServiceHeader    = []string{"Name", "Namespace", "Cluster", "Labels", "Type", "ClusterIP", "EXTERNAL-IP", "Ports", "SELECTOR"}
 	IngressHeader    = []string{"Name", "Namespace", "Cluster", "Labels", "HOSTS"}
 	ConfigmapHeader  = []string{"Name", "Namespace", "Cluster", "Labels"}
@@ -54,6 +54,9 @@ func (g *DescribeProxy) Describe() {
 	} else if g.Option.Configmap != "" {
 		g.Option.resource = model.ConfigmapType
 		g.showResourceState(g.Option.Configmap)
+	} else if g.Option.Pod != "" {
+		g.Option.resource = model.PodType
+		g.showResourceState(g.Option.Pod)
 	}
 }
 
@@ -75,7 +78,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 		}
 		for _, cluster := range kns.Clusters {
 			if cluster == g.Option.Cluster || g.Option.Cluster == "" {
-				data := kubernetes.GetResourceBody(name, int64(0), kns.Namespace, cluster, g.Option.resource)
+				data := kubernetes.GetResourceBody(name, int64(0), kns.Namespace, cluster, g.Option.resource, "")
 				switch g.Option.Output {
 				case YAML:
 					data, err := yaml.JSONToYAML(data)
@@ -87,10 +90,13 @@ func (g *DescribeProxy) showResourceState(name string) {
 					fmt.Println(string(data))
 				case PRETTY:
 					switch g.Option.resource {
-					case model.DeploymentType:
-					case model.DaemonsetType:
-					case model.StatefulsetType:
-						tb = append(tb, g.createDeploymentLine(data, cluster))
+					case model.DeploymentType, model.DaemonsetType, model.StatefulsetType:
+						pods := kubernetes.GetPod(int64(0), kns.Namespace, cluster, "?"+g.Option.resource+"="+g.Option.Deployment)
+						arr := []string{}
+						for _, p := range pods.Data {
+							arr = append(arr, p.Name)
+						}
+						tb = append(tb, append(g.createDeploymentLine(data, cluster), strings.Join(arr, ",")))
 						header = DeploymentHeader
 					case model.ServiceType:
 						header = ServiceHeader
@@ -101,6 +107,8 @@ func (g *DescribeProxy) showResourceState(name string) {
 					case model.ConfigmapType:
 						header = ConfigmapHeader
 						tb = append(tb, g.createConfigmapLine(data, cluster))
+					default:
+						fmt.Println(g.Option.resource)
 					}
 				}
 			}
