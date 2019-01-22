@@ -6,7 +6,7 @@ import (
 
 var ConfigCmd = &cobra.Command{
 	Use:   "config",
-	Short: "config",
+	Short: "For khadijah config tool.",
 	Run: func(cmd *cobra.Command, args []string) {
 
 	},

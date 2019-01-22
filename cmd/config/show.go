@@ -10,7 +10,7 @@ import (
 
 var ShowCmd = &cobra.Command{
 	Use:   "show",
-	Short: "config",
+	Short: "Used to show all user configurations.",
 	Run: func(cmd *cobra.Command, args []string) {
 		data, _ := json.MarshalIndent(config.GlobalOption, " ", " ")
 		fmt.Println(string(data))
