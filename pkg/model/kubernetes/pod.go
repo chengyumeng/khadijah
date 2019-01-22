@@ -45,7 +45,6 @@ func ListPods(appId int64, namespace string, cluster string, params string) (obj
 
 func GetPod(appId int64, namespace string, cluster string, pod string) (obj PodBody) {
 	url := fmt.Sprintf("%s/api/v1/kubernetes/apps/%d/pods/%s/namespaces/%s/clusters/%s", config.BaseURL, appId, pod, namespace, cluster)
-	fmt.Println(url)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, _ := http.DefaultClient.Do(req)

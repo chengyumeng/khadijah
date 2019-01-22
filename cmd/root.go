@@ -4,8 +4,8 @@ import (
 	"github.com/chengyumeng/khadijah/cmd/describe"
 	"github.com/chengyumeng/khadijah/cmd/exec"
 	"github.com/chengyumeng/khadijah/cmd/get"
-	"github.com/chengyumeng/khadijah/cmd/log"
 	"github.com/chengyumeng/khadijah/cmd/login"
+	"github.com/chengyumeng/khadijah/cmd/query"
 	"github.com/spf13/cobra"
 )
 
@@ -22,7 +22,7 @@ Email: 792400644@qq.com
 func init() {
 	RootCmd.AddCommand(get.GetCmd)
 	RootCmd.AddCommand(describe.DescribeCmd)
-	RootCmd.AddCommand(log.LogCmd)
+	RootCmd.AddCommand(query.QueryCmd)
 	RootCmd.AddCommand(exec.ExecCmd)
 	RootCmd.AddCommand(login.LoginCmd)
 	RootCmd.AddCommand(login.LogoutCmd)
