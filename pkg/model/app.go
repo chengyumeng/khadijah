@@ -11,7 +11,7 @@ import (
 )
 
 func GetAppBody(nsId int64) *AppBody {
-	url := fmt.Sprintf("%s/%s/%d/%s?pageSize=%d", config.BaseURL, "api/v1/namespaces", nsId, "apps", PageSize)
+	url := fmt.Sprintf("%s/%s/%d/%s?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/namespaces", nsId, "apps", PageSize)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, _ := http.DefaultClient.Do(req)

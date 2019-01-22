@@ -8,13 +8,19 @@ import (
 )
 
 type Option struct {
-	Token  string `json:"token"`
-	User   *User  `json:"user"`
-	APIKey string `json:"apiKey"`
+	Token  string  `json:"token"`
+	User   *User   `json:"user"`
+	APIKey string  `json:"apiKey"`
+	System *System `json:"system"`
 }
 
 type User struct {
 	Username string `json:"username"`
+}
+
+type System struct {
+	Version string `json:"version"`
+	BaseURL string `json:"baseURL"`
 }
 
 func LoadOption() (err error) {
@@ -43,5 +49,10 @@ func SetUser(u *User) (err error) {
 
 func SetToken(t string) (err error) {
 	GlobalOption.Token = t
+	return Save()
+}
+
+func SetSystem(sys System) (err error) {
+	GlobalOption.System = &sys
 	return Save()
 }

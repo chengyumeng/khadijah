@@ -11,7 +11,7 @@ import (
 )
 
 func GetNamespaceBody() *NamespaceBody {
-	url := fmt.Sprintf("%s/%s", config.BaseURL, "currentuser")
+	url := fmt.Sprintf("%s/%s", config.GlobalOption.System.BaseURL, "currentuser")
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 

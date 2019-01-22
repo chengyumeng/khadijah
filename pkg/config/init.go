@@ -8,11 +8,7 @@ import (
 	utilslog "github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
-var Version string = ""
-
 var GlobalOption *Option = new(Option)
-
-var BaseURL string = "http://127.0.0.1:4200"
 
 var UserConfigDir string = ""
 var ConfigFile string = "config"

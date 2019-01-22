@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/chengyumeng/khadijah/cmd/config"
 	"github.com/chengyumeng/khadijah/cmd/describe"
 	"github.com/chengyumeng/khadijah/cmd/exec"
 	"github.com/chengyumeng/khadijah/cmd/get"
@@ -24,6 +25,7 @@ func init() {
 	RootCmd.AddCommand(describe.DescribeCmd)
 	RootCmd.AddCommand(query.QueryCmd)
 	RootCmd.AddCommand(exec.ExecCmd)
+	RootCmd.AddCommand(config.ConfigCmd)
 	RootCmd.AddCommand(login.LoginCmd)
 	RootCmd.AddCommand(login.LogoutCmd)
 }

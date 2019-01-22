@@ -3,15 +3,15 @@ package openapi
 import (
 	"fmt"
 	"io/ioutil"
-	"strings"
 	"net/http"
+	"strings"
 
 	"github.com/chengyumeng/khadijah/pkg/config"
 	"github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
 func Query(action string, params []string) []byte {
-	url := fmt.Sprintf("%s/openapi/v1/gateway/action/%s?apikey=%s&%s", config.BaseURL, action, config.GlobalOption.APIKey, strings.Join(params, "&"))
+	url := fmt.Sprintf("%s/openapi/v1/gateway/action/%s?apikey=%s&%s", config.GlobalOption.System.BaseURL, action, config.GlobalOption.APIKey, strings.Join(params, "&"))
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	res, _ := http.DefaultClient.Do(req)
 	defer res.Body.Close()

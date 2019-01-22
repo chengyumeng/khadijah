@@ -2,7 +2,7 @@ package query
 
 import (
 	"fmt"
-	
+
 	"github.com/chengyumeng/khadijah/pkg/model/openapi"
 )
 

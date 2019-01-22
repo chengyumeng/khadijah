@@ -11,7 +11,7 @@ import (
 )
 
 func GetPodBody(appId int64, podType string) *PodBody {
-	url := fmt.Sprintf("%s/%s/%d/%ss?pageSize=%d", config.BaseURL, "api/v1/apps", appId, podType, PageSize)
+	url := fmt.Sprintf("%s/%s/%d/%ss?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/apps", appId, podType, PageSize)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, _ := http.DefaultClient.Do(req)

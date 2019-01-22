@@ -11,7 +11,7 @@ import (
 )
 
 func Login(opt Option) (err error) {
-	url := fmt.Sprintf("%s/login/db?username=%s&password=%s", config.BaseURL, opt.Username, opt.Password)
+	url := fmt.Sprintf("%s/login/db?username=%s&password=%s", config.GlobalOption.System.BaseURL, opt.Username, opt.Password)
 
 	req, _ := http.NewRequest("POST", url, nil)
 

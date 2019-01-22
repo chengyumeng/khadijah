@@ -16,6 +16,6 @@ var versionCmd = &cobra.Command{
 	Aliases: []string{"v"},
 	Short:   "get version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("khadijah %s \n", config.Version)
+		fmt.Printf("khadijah %s \n", config.GlobalOption.System.Version)
 	},
 }
