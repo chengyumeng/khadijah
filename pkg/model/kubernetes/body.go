@@ -30,6 +30,10 @@ type ConfigmapBody struct {
 	} `json:"data"`
 }
 
-type PodBody struct {
+type PodsBody struct {
 	Data []*Pod `json:"data"`
+}
+
+type PodBody struct {
+	Data *Pod `json:"data"`
 }
