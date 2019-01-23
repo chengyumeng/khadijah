@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/chengyumeng/khadijah/pkg/config"
+
 	"github.com/spf13/cobra"
 )
 
@@ -9,10 +10,10 @@ var APIkey string
 
 var System config.System
 
-
 var SetCmd = &cobra.Command{
-	Use:   "set",
-	Short: "Used to set some user configurations,such as `APIKey`.",
+	Use:     "set",
+	Short:   "Used to set some user configurations,such as `APIKey`.",
+	Example: `khadijah config set --apikey=example --websocketurl=ws://127.0.0.1:8080 --baseurl=http://127.0.0.1:4200`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(APIkey) > 0 {
 			config.SetAPIKey(APIkey)
