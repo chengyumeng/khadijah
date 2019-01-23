@@ -19,8 +19,9 @@ type User struct {
 }
 
 type System struct {
-	Version string `json:"version"`
-	BaseURL string `json:"baseURL"`
+	Version      string `json:"version"`
+	BaseURL      string `json:"baseURL"`
+	WebsocketURL string `json:"websocketURL"`
 }
 
 func LoadOption() (err error) {

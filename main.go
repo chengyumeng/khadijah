@@ -1,8 +1,8 @@
 package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 
 	"github.com/chengyumeng/khadijah/cmd"
 	"github.com/chengyumeng/khadijah/pkg/config"
@@ -20,7 +20,8 @@ func main() {
 	}
 	if config.GlobalOption.System == nil {
 		err := config.SetSystem(config.System{
-			BaseURL: "http://127.0.0.1:4200",
+			BaseURL:      "http://127.0.0.1:4200",
+			WebsocketURL: "ws://127.0.0.1:8080",
 		})
 		if err != nil {
 			fmt.Println(err)
