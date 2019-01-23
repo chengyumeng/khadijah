@@ -8,16 +8,18 @@ import (
 var option login.Option
 
 var LoginCmd = &cobra.Command{
-	Use:   "login",
-	Short: "Log in to the wayne platform for more resource access.",
+	Use:     "login",
+	Short:   "Log in to the Wayne platform for more API access.",
+	Example: "khadijah login -uadmin -padmin",
 	Run: func(cmd *cobra.Command, args []string) {
 		login.Login(option)
 	},
 }
 
 var LogoutCmd = &cobra.Command{
-	Use:   "logout",
-	Short: "Log out from the wayne platform.",
+	Use:     "logout",
+	Short:   "Log out from the Wayne platform.",
+	Example: "khadijah logout",
 	Run: func(cmd *cobra.Command, args []string) {
 		login.Clear()
 	},

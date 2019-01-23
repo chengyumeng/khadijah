@@ -8,8 +8,9 @@ import (
 var getDeploymentStatusOption query.GetDeploymentStatusOption
 
 var GetDeploymentStatusCmd = &cobra.Command{
-	Use:   "getdeploymentstatus",
-	Short: "Get Resource Info by OpenAPI",
+	Use:     "getdeploymentstatus",
+	Short:   "Get Deployment Status by OpenAPI",
+	Example: "khadijah getpodinfo -c=SHBT --label=app=openapi-demo",
 	Run: func(cmd *cobra.Command, args []string) {
 		proxy := query.NewProxy()
 		proxy.GetDeploymentStatus(getDeploymentStatusOption)

@@ -6,7 +6,7 @@ import (
 
 var QueryCmd = &cobra.Command{
 	Use:   "query",
-	Short: "Query by OpenAPI",
+	Short: "Query by Wayne OpenAPI",
 	Run: func(cmd *cobra.Command, args []string) {
 	},
 }

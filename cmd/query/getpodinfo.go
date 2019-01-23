@@ -8,8 +8,9 @@ import (
 var option query.GetPodInfoOption
 
 var GetPodInfoCmd = &cobra.Command{
-	Use:   "getpodinfo",
-	Short: "Get Pod Info by OpenAPI",
+	Use:     "getpodinfo",
+	Short:   "Get Pod Info by OpenAPI",
+	Example: "khadijah getpodinfo -c=SHBT --label=app=openapi-demo",
 	Run: func(cmd *cobra.Command, args []string) {
 		proxy := query.NewProxy()
 		proxy.GetPodInfo(option)

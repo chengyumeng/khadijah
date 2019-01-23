@@ -14,8 +14,8 @@ var (
 
 var ExecCmd = &cobra.Command{
 	Use:     "exec",
-	Short:   "执行容器命令操作",
-	Example: `khadijah exec -it a b c /bin/bash`,
+	Short:   "Execute a command in a container.",
+	Example: `khadijah exec -p=openapi-demo-9c5bd44b7-xvjpg -c=SHBT --container=php --cmd=whoami -n=default`,
 	Args:    cobra.NoArgs,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		return nil
@@ -38,11 +38,10 @@ var ExecCmd = &cobra.Command{
 }
 
 func init() {
-	ExecCmd.Flags().StringVarP(&option.Cluster, "cluster", "c", "", "服务所在集群")
-	ExecCmd.Flags().StringVarP(&option.Namespace, "namespace", "n", "default", "服务所在命名空间")
-	ExecCmd.Flags().StringVarP(&option.Deployment, "deployment", "d", "", "服务的部署名称")
-	ExecCmd.Flags().StringVarP(&option.Pod, "pod", "p", "", "服务的 pod 名称")
-	ExecCmd.Flags().StringVarP(&option.Container, "container", "", "", "服务中的特定容器名称")
-	ExecCmd.Flags().StringVarP(&option.Cmd, "cmd", "", "/bin/bash", "进入服务执行的命令")
-	ExecCmd.Flags().BoolVarP(&option.Terminal, "terminal", "t", false, "")
+	ExecCmd.Flags().StringVarP(&option.Cluster, "cluster", "c", "", "Wayne cluster name.")
+	ExecCmd.Flags().StringVarP(&option.Namespace, "namespace", "n", "default", "Wayne namespace name.")
+	ExecCmd.Flags().StringVarP(&option.Pod, "pod", "p", "", "Kubernetes pod name.")
+	ExecCmd.Flags().StringVarP(&option.Container, "container", "", "", "Kubernetes container name.")
+	ExecCmd.Flags().StringVarP(&option.Cmd, "cmd", "", "/bin/bash", "command")
+	ExecCmd.Flags().BoolVarP(&option.Terminal, "terminal", "t", false, "Whether to create a terminal.")
 }
