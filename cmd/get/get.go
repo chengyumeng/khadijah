@@ -8,8 +8,9 @@ import (
 var option get.Option
 
 var GetCmd = &cobra.Command{
-	Use: "get",
-	Short: `Display one wayne resource.
+	Use:   "get",
+	Short: `Display one wayne resource.`,
+	Long: `Display one wayne resource.
 
 Valid resource types include:
 * deployment
