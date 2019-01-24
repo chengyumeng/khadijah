@@ -1,0 +1,10 @@
+language: go
+go_import_path: github.com/chengyumeng/khadijah
+go:
+  - 1.10.x
+  - 1.11.x
+  - tip
+
+script:
+  - go test -v ./...
+  - go build -o khadijah
