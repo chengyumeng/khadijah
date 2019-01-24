@@ -13,7 +13,7 @@ import (
 var RootCmd = &cobra.Command{
 	Use: "khadijah",
 	Long: `The Client Tool for Wayne
-Email: 792400644@qq.com
+Email: 792400644@qq.com 微信公众号: 程天写代码
 `,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		return nil
