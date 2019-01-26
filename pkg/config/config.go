@@ -4,6 +4,12 @@ import (
 	"encoding/json"
 	"os"
 	"path"
+
+	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
+)
+
+var (
+	logger = utillog.NewAppLogger("pkg/describe")
 )
 
 func Save() (err error) {

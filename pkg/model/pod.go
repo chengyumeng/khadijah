@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/chengyumeng/khadijah/pkg/config"
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
 func GetPodBody(appId int64, podType string) *PodBody {
@@ -18,7 +17,7 @@ func GetPodBody(appId int64, podType string) *PodBody {
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.AppLogger.Warning(err)
+		logger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
 		fmt.Println(string(body))
@@ -27,7 +26,7 @@ func GetPodBody(appId int64, podType string) *PodBody {
 	data := new(PodBody)
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		log.AppLogger.Warning(err)
+		logger.Warning(err)
 	}
 	return data
 }

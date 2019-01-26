@@ -7,7 +7,11 @@ import (
 	"strings"
 
 	"github.com/chengyumeng/khadijah/pkg/config"
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
+	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
+)
+
+var (
+	logger = utillog.NewAppLogger("pkg/model/openapi")
 )
 
 func Query(action string, params []string) []byte {
@@ -17,7 +21,7 @@ func Query(action string, params []string) []byte {
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.AppLogger.Warning(err)
+		logger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
 		fmt.Println(string(body))
