@@ -31,7 +31,7 @@ func (f *CmdFormatter) Format(entry *log.Entry) ([]byte, error) {
 	case log.WarnLevel:
 		colorFunc = color.YellowString
 	case log.InfoLevel:
-		colorFunc = nil
+		colorFunc = color.CyanString
 	case log.DebugLevel:
 		colorFunc = color.GreenString
 	}

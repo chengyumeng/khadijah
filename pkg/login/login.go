@@ -36,7 +36,7 @@ func Login(opt Option) (err error) {
 		return err
 	}
 	if err := config.SetToken(data.Data.Token); err == nil {
-		logger.Println("Login Success!")
+		logger.Infoln("Login Success!")
 	} else {
 		return err
 	}
@@ -48,7 +48,7 @@ func Login(opt Option) (err error) {
 
 func Clear() error {
 	if err := config.SetToken(""); err == nil {
-		logger.Println("Logout Success!")
+		logger.Infoln("Logout Success!")
 	} else {
 		return err
 	}

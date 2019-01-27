@@ -89,7 +89,8 @@ func (g *DescribeProxy) showResourceState(name string) {
 				case YAML:
 					data, err := yaml.JSONToYAML(data)
 					if err != nil {
-
+						logger.Errorln(err)
+						return
 					}
 					fmt.Println(string(data))
 				case JSON:
@@ -152,7 +153,7 @@ func (g *DescribeProxy) createDeploymentLine(data []byte, cluster string) []stri
 	obj := new(kubernetes.DeploymentBody)
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
-		logger.Error(err)
+		logger.Errorln(err)
 	}
 	ic := make(map[string]string)
 	for _, c := range obj.Data.Spec.Template.Spec.Containers {
@@ -170,7 +171,7 @@ func (g *DescribeProxy) createServiceLine(data []byte, cluster string) []string 
 	obj := new(kubernetes.ServiceBody)
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
-		logger.Error(err)
+		logger.Errorln(err)
 	}
 	ps := []string{}
 	for _, port := range obj.Data.Spec.Ports {
@@ -188,7 +189,7 @@ func (g *DescribeProxy) createIngressLine(data []byte, cluster string) []string 
 	obj := new(kubernetes.IngressBody)
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
-		logger.Error(err)
+		logger.Errorln(err)
 	}
 	hosts := []string{}
 	for _, r := range obj.Data.Spec.Rules {
@@ -203,7 +204,7 @@ func (g *DescribeProxy) createConfigmapLine(data []byte, cluster string) []strin
 	obj := new(kubernetes.ConfigmapBody)
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
-		logger.Error(err)
+		logger.Errorln(err)
 	}
 	return []string{obj.Data.ObjectMeta.Name,
 		obj.Data.ObjectMeta.Namespace, cluster,

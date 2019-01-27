@@ -104,7 +104,7 @@ func (g *GetProxy) GetPod(podType string) {
 			}
 		}
 		if len(nsIds) == 0 {
-			logger.Warning("No NS")
+			logger.Warning("Empty namespace list.")
 		}
 	} else {
 		for _, n := range ns.Data.Namespaces {
@@ -143,7 +143,7 @@ func (g *GetProxy) GetService() {
 			}
 		}
 		if len(nsl) == 0 {
-			logger.Error("No NS")
+			logger.Error("Empty namespace list")
 		}
 	} else {
 		for _, n := range ns.Data.Namespaces {

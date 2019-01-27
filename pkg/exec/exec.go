@@ -45,7 +45,7 @@ func NewSocketShell() *SocketShell {
 	h.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	c, _, err := websocket.DefaultDialer.Dial(u, h)
 	if err != nil {
-		logger.Error("建立 websocket 时候出现异常:", err)
+		logger.Errorln( err)
 		c.Close()
 	}
 	ssh.Conection = c
@@ -73,7 +73,7 @@ func (s *SocketShell) Listen() {
 		fmt.Print(string(message))
 		if string(message) == "\r\nexit\r\n" {
 			s.Exit = true
-			fmt.Print("使用回车（Enter）安全关闭连接")
+			logger.Infoln("Safely close the connection with the Enter key")
 		}
 	}
 }
