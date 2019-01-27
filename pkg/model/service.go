@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/chengyumeng/khadijah/pkg/config"
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
 func GetServiceBody(appId int64) *ServiceBody {
@@ -18,7 +17,7 @@ func GetServiceBody(appId int64) *ServiceBody {
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.AppLogger.Warning(err)
+		logger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
 		return nil
@@ -26,7 +25,7 @@ func GetServiceBody(appId int64) *ServiceBody {
 	data := new(ServiceBody)
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		log.AppLogger.Warning(err)
+		logger.Warning(err)
 	}
 	return data
 }

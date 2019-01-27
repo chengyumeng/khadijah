@@ -7,7 +7,11 @@ import (
 	"net/http"
 
 	"github.com/chengyumeng/khadijah/pkg/config"
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
+	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
+)
+
+var (
+	logger = utillog.NewAppLogger("pkg/login")
 )
 
 func Login(opt Option) (err error) {
@@ -23,7 +27,7 @@ func Login(opt Option) (err error) {
 		return err
 	}
 	if res.StatusCode != http.StatusOK {
-		log.AppLogger.Error(string(body))
+		logger.Error(string(body))
 		return
 	}
 	data := new(Body)
@@ -32,7 +36,7 @@ func Login(opt Option) (err error) {
 		return err
 	}
 	if err := config.SetToken(data.Data.Token); err == nil {
-		log.AppLogger.Println("Login Success!")
+		logger.Println("Login Success!")
 	} else {
 		return err
 	}
@@ -44,7 +48,7 @@ func Login(opt Option) (err error) {
 
 func Clear() error {
 	if err := config.SetToken(""); err == nil {
-		log.AppLogger.Println("Logout Success!")
+		logger.Println("Logout Success!")
 	} else {
 		return err
 	}

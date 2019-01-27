@@ -7,7 +7,11 @@ import (
 	"net/http"
 
 	"github.com/chengyumeng/khadijah/pkg/config"
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
+	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
+)
+
+var (
+	logger = utillog.NewAppLogger("pkg/model/kubernetes")
 )
 
 func GetResourceBody(resource string, appId int64, namespace string, cluster string, resourceType string, params string) []byte {
@@ -18,10 +22,10 @@ func GetResourceBody(resource string, appId int64, namespace string, cluster str
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.AppLogger.Warning(err)
+		logger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
-		fmt.Println(string(body))
+		logger.Warning(string(body))
 	}
 	return body
 }
@@ -34,10 +38,10 @@ func ListPods(appId int64, namespace string, cluster string, params string) (obj
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.AppLogger.Warning(err)
+		logger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
-		fmt.Println(string(body))
+		logger.Warning(string(body))
 	}
 	err = json.Unmarshal(body, &obj)
 	return obj
@@ -51,10 +55,10 @@ func GetPod(appId int64, namespace string, cluster string, pod string) (obj PodB
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.AppLogger.Warning(err)
+		logger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
-		fmt.Println(string(body))
+		logger.Warning(string(body))
 	}
 	err = json.Unmarshal(body, &obj)
 	return obj

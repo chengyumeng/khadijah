@@ -6,11 +6,13 @@ import (
 	"strconv"
 
 	"github.com/chengyumeng/khadijah/pkg/model"
-	"github.com/chengyumeng/khadijah/pkg/utils/log"
+	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/olekukonko/tablewriter"
 )
 
-const pageSize int = 1024 * 1024 // 单页显示，不分页
+var (
+	logger = utillog.NewAppLogger("pkg/get")
+)
 
 type GetProxy struct {
 	Option Option
@@ -67,7 +69,7 @@ func (g *GetProxy) getApp() {
 			}
 		}
 		if len(nsIds) == 0 {
-			log.AppLogger.Warning("NS ERROR")
+			logger.Warning("NS ERROR")
 			return
 		}
 	} else {
@@ -102,7 +104,7 @@ func (g *GetProxy) GetPod(podType string) {
 			}
 		}
 		if len(nsIds) == 0 {
-			log.AppLogger.Warning("No NS")
+			logger.Warning("No NS")
 		}
 	} else {
 		for _, n := range ns.Data.Namespaces {
@@ -141,7 +143,7 @@ func (g *GetProxy) GetService() {
 			}
 		}
 		if len(nsl) == 0 {
-			log.AppLogger.Error("No NS")
+			logger.Error("No NS")
 		}
 	} else {
 		for _, n := range ns.Data.Namespaces {
