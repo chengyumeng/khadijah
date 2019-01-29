@@ -45,7 +45,7 @@ func NewSocketShell() *SocketShell {
 	h.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	c, _, err := websocket.DefaultDialer.Dial(u, h)
 	if err != nil {
-		logger.Errorln( err)
+		logger.Errorln(err)
 		c.Close()
 	}
 	ssh.Conection = c

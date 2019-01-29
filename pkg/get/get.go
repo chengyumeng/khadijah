@@ -49,6 +49,9 @@ func (g *GetProxy) Get() {
 
 func (g *GetProxy) getNamespace() {
 	data := model.GetNamespaceBody()
+	if data == nil {
+		return
+	}
 	fmt.Printf("Name: %s Email:%s\n\n", data.Data.Name, data.Data.Email)
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Id", "Name", "User", "CreateTime", "UpdateTime"})
@@ -62,6 +65,9 @@ func (g *GetProxy) getNamespace() {
 func (g *GetProxy) getApp() {
 	nsIds := []int64{}
 	ns := model.GetNamespaceBody()
+	if ns == nil {
+		return
+	}
 	if g.Option.NS != "" {
 		for _, n := range ns.Data.Namespaces {
 			if n.Name == g.Option.NS {
@@ -97,6 +103,9 @@ func (g *GetProxy) getApp() {
 func (g *GetProxy) GetPod(podType string) {
 	nsIds := []int64{}
 	ns := model.GetNamespaceBody()
+	if ns == nil {
+		return
+	}
 	if g.Option.NS != "" {
 		for _, n := range ns.Data.Namespaces {
 			if n.Name == g.Option.NS {
@@ -136,6 +145,9 @@ func (g *GetProxy) GetPod(podType string) {
 func (g *GetProxy) GetService() {
 	nsl := []model.Namespace{}
 	ns := model.GetNamespaceBody()
+	if ns == nil {
+		return
+	}
 	if g.Option.NS != "" {
 		for _, n := range ns.Data.Namespaces {
 			if n.Name == g.Option.NS {
