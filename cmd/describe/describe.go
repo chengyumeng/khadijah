@@ -20,6 +20,7 @@ var DescribeCmd = &cobra.Command{
 }
 
 func init() {
+	DescribeCmd.Flags().SortFlags = false
 	DescribeCmd.Flags().StringVarP(&option.Namespace, "namespace", "n", "", "Wayne namespace(their is some different from kubernetes namespace).")
 	DescribeCmd.Flags().StringVarP(&option.Pod, "pod", "", "", "Kubernetes pod name.")
 	DescribeCmd.Flags().StringVarP(&option.Deployment, "deployment", "d", "", "Wayne deployment name.")
