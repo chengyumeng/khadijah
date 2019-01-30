@@ -1,8 +1,8 @@
 # Khadijah
 
 [![Build Statue](https://travis-ci.org//chengyumeng/khadijah.svg?branch=master)](https://travis-ci.org/chengyumeng/khadijah)
-[![Build Tag](https://img.shields.io/github/tag//chengyumeng/khadijah.svg)](https://github.com//chengyumeng/khadijah/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com//chengyumeng/khadijah)](https://goreportcard.com/report/github.com/Qihoo360/wayne)
+[![Build Release](https://img.shields.io/github/release/chengyumeng/Khadijah.svg)](https://github.com/chengyumeng/khadijah/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/chengyumeng/khadijah)](https://goreportcard.com/report/github.com/chengyumeng/khadijah)
 
 Khadijah 是一款基于奇虎360开源的 Wayne 的 kubernetes 命令行管理工具。
 
