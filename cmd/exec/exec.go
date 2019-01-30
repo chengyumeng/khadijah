@@ -24,7 +24,7 @@ var ExecCmd = &cobra.Command{
 		ssh := pkgexec.NewSocketShell()
 		err := ssh.Connect(option)
 		if err != nil {
-			fmt.Sprintf("创建连接的时候出现异常： %s", err.Error())
+			fmt.Printf("创建连接的时候出现异常： %s", err.Error())
 			return
 		}
 

@@ -80,7 +80,8 @@ func (g *DescribeProxy) showResourceState(name string) {
 		kns := new(model.Metadata)
 		err := json.Unmarshal([]byte(ns.Metadata), &kns)
 		if err != nil {
-
+			logger.Errorln(err)
+			return
 		}
 		for _, cluster := range kns.Clusters {
 			if cluster == g.Option.Cluster || g.Option.Cluster == "" {
