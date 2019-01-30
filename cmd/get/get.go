@@ -30,6 +30,7 @@ And you can set ns/app as a filter.`,
 }
 
 func init() {
+	GetCmd.Flags().SortFlags = false
 	GetCmd.Flags().StringVarP(&option.NS, "ns", "n", "", "Wayne namespace filter.")
 	GetCmd.Flags().StringVarP(&option.App, "app", "a", "", "Wayne application filter.")
 	GetCmd.Flags().BoolVarP(&option.Deployment, "deployment", "d", false, "Whether to output deployment list.")

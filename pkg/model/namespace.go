@@ -21,7 +21,7 @@ func GetNamespaceBody() *NamespaceBody {
 		logger.Warning(err)
 	}
 	if res.StatusCode != http.StatusOK {
-		fmt.Println(string(body))
+		logger.Errorln(string(body))
 		return nil
 	}
 	data := new(NamespaceBody)
