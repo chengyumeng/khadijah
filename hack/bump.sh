@@ -6,21 +6,11 @@
 git pull
 
 CHANGELOG=CHANGELOG.md
-GO_MAIN=src/backend/main.go
-PACKAGE_JSON=src/frontend/package.json
-SWAGGER_VERSION_GO=src/backend/controllers/openapi/openapi.go
+GO_MAIN=main.go
 
 VERSION=(`grep -Eo "[0-9]+\.[0-9]+\.[0-9]+[a-z0-9\-]*" $GO_MAIN`)
 echo "Project current version: [$VERSION] "
 
-for FILE in $PACKAGE_JSON
-do
-    grep -q "\"version\": \"$VERSION\"" $FILE
-    if [ ! $? = 0 ]; then
-        echo "$(tput setaf 1)Version $VERSION not found in $FILE $(tput sgr0)"
-        exit 1
-    fi
-done
 
 BASES=(`echo $VERSION | tr '.' ' '`)
 V_MAJOR=${BASES[0]}
@@ -77,8 +67,6 @@ if [ "$CONFIRM1" = "yes" ]; then CONFIRM1="Y"; fi
 if [ "$CONFIRM1" = "YES" ]; then CONFIRM1="Y"; fi
 if [ "$CONFIRM1" = "Y" ]; then
     sed -i "s/$VERSION/$NEXT_VERSION/" $GO_MAIN
-    sed -i 's/\("version": "\)'$VERSION'/\1'$NEXT_VERSION'/' $PACKAGE_JSON
-    sed -i 's/\(Version: \)'$VERSION'/\1'$NEXT_VERSION'/' $SWAGGER_VERSION_GO
     git changelog --no-merges --tag $NEXT_VERSION $CHANGELOG
 
     COMMITLOG="
