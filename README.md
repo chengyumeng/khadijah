@@ -66,7 +66,7 @@ khadijah describe -n=infra -d=move-num1 -o=pretty
 ```
 
 ```bash
-khadijah query getpodinfo -c=SHBT --label=app=move-num1
+khadijah query getpodinfo -c=K8S-1 --label=app=move-num1
 ```
 ```json
 {
