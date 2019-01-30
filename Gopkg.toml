@@ -1,3 +1,4 @@
+ignored = ["golang.org/*","k8s.io/apimachinery*"]
 [[constraint]]
   name = "github.com/Sirupsen/logrus"
   version = "0.8.7"
@@ -27,6 +28,10 @@
   version = "0.0.3"
 
 [[constraint]]
-name = "github.com/pkg/term"
-branch = "master"
+  name = "github.com/pkg/term"
+  branch = "master"
 
+
+[[constraint]]
+  name = "github.com/smartystreets/goconvey"
+  version = "1.6.3"

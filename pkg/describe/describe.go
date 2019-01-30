@@ -119,7 +119,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 						tb = append(tb, g.createPodLine(pods.Data, cluster))
 						header = PodHeader
 					default:
-						fmt.Println(g.Option.resource)
+						logger.Warningln(g.Option.resource)
 					}
 				}
 			}
@@ -154,6 +154,7 @@ func (g *DescribeProxy) createDeploymentLine(data []byte, cluster string) []stri
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
 		logger.Errorln(err)
+		return []string{}
 	}
 	ic := make(map[string]string)
 	for _, c := range obj.Data.Spec.Template.Spec.Containers {
@@ -172,6 +173,7 @@ func (g *DescribeProxy) createServiceLine(data []byte, cluster string) []string 
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
 		logger.Errorln(err)
+		return []string{}
 	}
 	ps := []string{}
 	for _, port := range obj.Data.Spec.Ports {
@@ -190,6 +192,7 @@ func (g *DescribeProxy) createIngressLine(data []byte, cluster string) []string 
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
 		logger.Errorln(err)
+		return []string{}
 	}
 	hosts := []string{}
 	for _, r := range obj.Data.Spec.Rules {
@@ -205,6 +208,7 @@ func (g *DescribeProxy) createConfigmapLine(data []byte, cluster string) []strin
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
 		logger.Errorln(err)
+		return []string{}
 	}
 	return []string{obj.Data.ObjectMeta.Name,
 		obj.Data.ObjectMeta.Namespace, cluster,
