@@ -28,9 +28,9 @@ const (
  * 这里这样定义的目的只是描述 shell 的实现形式
  */
 type SocketShell struct {
-	Conection *websocket.Conn
-	Command   string
-	Exit      bool
+	Connection *websocket.Conn
+	Command    string
+	Exit       bool
 }
 
 type Message struct {
@@ -48,7 +48,7 @@ func NewSocketShell() *SocketShell {
 		logger.Errorln(err)
 		c.Close()
 	}
-	ssh.Conection = c
+	ssh.Connection = c
 	return ssh
 }
 
@@ -58,13 +58,13 @@ func (s *SocketShell) Connect(option Option) error {
 	if err != nil {
 		return err
 	}
-	return s.Conection.WriteMessage(websocket.TextMessage, data)
+	return s.Connection.WriteMessage(websocket.TextMessage, data)
 }
 
 func (s *SocketShell) Listen() {
 	writer := bufio.NewWriter(os.Stdout)
 	for s.Exit == false {
-		_, message, err := s.Conection.ReadMessage()
+		_, message, err := s.Connection.ReadMessage()
 		if err != nil {
 			logger.Error(err)
 			return
@@ -96,6 +96,6 @@ func (s *SocketShell) StdinSend() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		s.Conection.WriteMessage(websocket.TextMessage, data)
+		s.Connection.WriteMessage(websocket.TextMessage, data)
 	}
 }

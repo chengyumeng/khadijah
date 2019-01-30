@@ -2,6 +2,7 @@ package login
 
 import (
 	"github.com/chengyumeng/khadijah/pkg/login"
+	"github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/spf13/cobra"
 )
 
@@ -12,7 +13,10 @@ var LoginCmd = &cobra.Command{
 	Short:   "Log in to the Wayne platform for more API access.",
 	Example: "khadijah login -uadmin -padmin",
 	Run: func(cmd *cobra.Command, args []string) {
-		login.Login(option)
+		err := login.Login(option)
+		if err != nil {
+			log.CmdLogger.Errorln(err)
+		}
 	},
 }
 
