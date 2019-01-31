@@ -51,6 +51,7 @@ if [ "$CONFIRM0" = "Y" ]; then
     if [ -n "$exists" ]; then
         git checkout $RELEASE_BRANCH
         git pull origin $RELEASE_BRANCH
+        git pull origin master
     else
         git checkout -b $RELEASE_BRANCH
     fi
