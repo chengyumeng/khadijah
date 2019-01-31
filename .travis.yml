@@ -8,3 +8,5 @@ go:
 script:
   - go test -v ./...
   - go build -o khadijah
+  - go get github.com/chengyumeng/docfmt
+  - docfmt -p=. --lint --debug
