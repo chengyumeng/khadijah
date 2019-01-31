@@ -4,7 +4,7 @@
 [![Build Release](https://img.shields.io/github/release/chengyumeng/Khadijah.svg)](https://github.com/chengyumeng/khadijah/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/chengyumeng/khadijah)](https://goreportcard.com/report/github.com/chengyumeng/khadijah)
 
-Khadijah 是一款基于奇虎360开源的 Wayne 的 kubernetes 命令行管理工具。
+Khadijah 是一款基于奇虎 360 开源的 Wayne 的 kubernetes 命令行管理工具。
 
 ### 为什么使用 Khadijah ?
 
@@ -24,7 +24,7 @@ go get github.com/chengyumeng/khadijah
 
 ```bash
 khadijah config set --apikey=example --websocketurl=ws://127.0.0.1:8080 --baseurl=http://127.0.0.1:4200
-# 必须指定 baseurl，该值为 Wayne 服务的http(s)地址
+# 必须指定 baseurl，该值为 Wayne 服务的 http(s)地址
 # websocketurl 是用于远程 Shell 的 Wayne 地址，可以按需指定
 # apikey 为需要调用 Wayne OpenAPI 需要指定的值（khadijah query 下所有操作依赖于这个值）
 ```
