@@ -1,4 +1,16 @@
 
+0.0.3 / 2019-01-31
+==================
+
+  * Fix bump file bug
+  * Add Get VIP Info API
+  * Fix Logger fomate style
+  * Update Version message
+  * fix for docfmt
+  * Add basic document lint
+  * fix some code style by goreportcard.com
+  * Fix URI bug
+
 0.0.2 / 2019-01-31
 ==================
 
