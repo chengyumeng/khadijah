@@ -45,3 +45,10 @@ func (g *QueryProxy) GetDeploymentStatus(opt GetDeploymentStatusOption) {
 	})
 	fmt.Println(string(data))
 }
+
+func (g *QueryProxy) GetVIPInfo(opt GetVIPInfoOption) {
+	data := openapi.Query("get_vip_info", []string{
+		fmt.Sprintf("port=%d", opt.Port),
+	})
+	fmt.Println(string(data))
+}

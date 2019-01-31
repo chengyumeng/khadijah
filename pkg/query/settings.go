@@ -21,5 +21,6 @@ type GetDeploymentStatusOption struct {
 	Cluster    string
 }
 
-type GetVIPInfo struct {
+type GetVIPInfoOption struct {
+	Port int
 }
