@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/chengyumeng/khadijah/cmd"
@@ -16,7 +15,7 @@ var (
 func main() {
 	err := config.LoadOption()
 	if err != nil {
-		utilslog.AppLogger.Error("Error Load Option")
+		utilslog.AppLogger.Errorln(err)
 	}
 	if config.GlobalOption.System == nil {
 		err := config.SetSystem(config.System{
@@ -24,14 +23,14 @@ func main() {
 			WebsocketURL: "ws://127.0.0.1:8080",
 		})
 		if err != nil {
-			fmt.Println(err)
+			utilslog.AppLogger.Errorln(err)
 		}
 	}
 	config.GlobalOption.System.Version = Version
 
 	err = cmd.RootCmd.Execute()
 	if err != nil {
-		utilslog.AppLogger.Error("")
+		utilslog.AppLogger.Error(err)
 		os.Exit(1)
 	}
 }
