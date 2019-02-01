@@ -1,4 +1,11 @@
 
+0.0.4 / 2019-02-01
+==================
+
+  * Add code picture for khadijah -v command
+  * Add get Ingress API and remove some redundancy code
+  * Add \n to version message
+
 0.0.3 / 2019-01-31
 ==================
 
