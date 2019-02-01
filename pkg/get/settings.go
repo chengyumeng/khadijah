@@ -8,6 +8,7 @@ type Option struct {
 	Pod         bool
 	Cronjob     bool
 	Service     bool
+	Ingress     bool
 	Application bool
 	Namespace   bool
 	NS          string

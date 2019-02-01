@@ -37,6 +37,7 @@ func init() {
 	GetCmd.Flags().BoolVarP(&option.Daemonset, "daemonset", "", false, "Whether to output daemonset list.")
 	GetCmd.Flags().BoolVarP(&option.Statefulset, "statefulset", "", false, "Whether to output statefulset list.")
 	GetCmd.Flags().BoolVarP(&option.Service, "service", "s", false, "Whether to output service list.")
+	GetCmd.Flags().BoolVarP(&option.Ingress, "ingress", "i", false, "Whether to output ingress list.")
 	GetCmd.Flags().BoolVarP(&option.Cronjob, "cronjob", "c", false, "Whether to output cronjob list.")
 	GetCmd.Flags().BoolVarP(&option.Namespace, "namespace", "", false, "Whether to output namespace list.")
 	GetCmd.Flags().BoolVarP(&option.Application, "application", "", false, "Whether to output application list.")

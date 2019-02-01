@@ -27,3 +27,10 @@ type ServiceBody struct {
 		Services []Service `json:"list"`
 	} `json:"data"`
 }
+
+type IngressBody struct {
+	Data struct {
+		Page
+		Ingresses []Ingress `json:"list"`
+	} `json:"data"`
+}

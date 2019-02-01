@@ -40,6 +40,8 @@ func (g *GetProxy) Get() {
 		g.GetPod(model.CronjobType)
 	} else if g.Option.Service {
 		g.GetService()
+	} else if g.Option.Ingress {
+		g.GetIngress()
 	} else if g.Option.Application {
 		g.getApp()
 	} else if g.Option.Namespace {
@@ -63,31 +65,12 @@ func (g *GetProxy) getNamespace() {
 }
 
 func (g *GetProxy) getApp() {
-	nsIds := []int64{}
-	ns := model.GetNamespaceBody()
-	if ns == nil {
-		return
-	}
-	if g.Option.NS != "" {
-		for _, n := range ns.Data.Namespaces {
-			if n.Name == g.Option.NS {
-				nsIds = append(nsIds, n.Id)
-			}
-		}
-		if len(nsIds) == 0 {
-			logger.Warning("NS ERROR")
-			return
-		}
-	} else {
-		for _, n := range ns.Data.Namespaces {
-			nsIds = append(nsIds, n.Id)
-		}
-	}
+	list := g.checkNS()
 
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Id", "Name", "Namespace", "User", "CreateTime"})
-	for _, id := range nsIds {
-		data := model.GetAppBody(id)
+	for _, ns := range list {
+		data := model.GetAppBody(ns.Id)
 		if data == nil {
 			continue
 		}
@@ -101,30 +84,12 @@ func (g *GetProxy) getApp() {
 }
 
 func (g *GetProxy) GetPod(podType string) {
-	nsIds := []int64{}
-	ns := model.GetNamespaceBody()
-	if ns == nil {
-		return
-	}
-	if g.Option.NS != "" {
-		for _, n := range ns.Data.Namespaces {
-			if n.Name == g.Option.NS {
-				nsIds = append(nsIds, n.Id)
-			}
-		}
-		if len(nsIds) == 0 {
-			logger.Warning("Empty namespace list.")
-		}
-	} else {
-		for _, n := range ns.Data.Namespaces {
-			nsIds = append(nsIds, n.Id)
-		}
-	}
+	list := g.checkNS()
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	exist := false
-	for _, nsId := range nsIds {
-		if app := model.GetAppBody(nsId); app != nil {
+	for _, ns := range list {
+		if app := model.GetAppBody(ns.Id); app != nil {
 			for _, a := range app.Data.Apps {
 				if g.Option.App == "" || g.Option.App == a.Name {
 					data := model.GetPodBody(a.Id, podType)
@@ -143,29 +108,11 @@ func (g *GetProxy) GetPod(podType string) {
 }
 
 func (g *GetProxy) GetService() {
-	nsl := []model.Namespace{}
-	ns := model.GetNamespaceBody()
-	if ns == nil {
-		return
-	}
-	if g.Option.NS != "" {
-		for _, n := range ns.Data.Namespaces {
-			if n.Name == g.Option.NS {
-				nsl = append(nsl, n)
-			}
-		}
-		if len(nsl) == 0 {
-			logger.Error("Empty namespace list")
-		}
-	} else {
-		for _, n := range ns.Data.Namespaces {
-			nsl = append(nsl, n)
-		}
-	}
+	list := g.checkNS()
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	exist := false
-	for _, ns := range nsl {
+	for _, ns := range list {
 		if app := model.GetAppBody(ns.Id); app != nil {
 			for _, a := range app.Data.Apps {
 				if g.Option.App == "" || g.Option.App == a.Name {
@@ -182,4 +129,50 @@ func (g *GetProxy) GetService() {
 	if exist {
 		table.Render()
 	}
+}
+
+func (g *GetProxy) GetIngress() {
+	list := g.checkNS()
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
+	exist := false
+	for _, ns := range list {
+		if app := model.GetAppBody(ns.Id); app != nil {
+			for _, a := range app.Data.Apps {
+				if g.Option.App == "" || g.Option.App == a.Name {
+					data := model.GetIngressBody(a.Id)
+					for _, ing := range data.Data.Ingresses {
+						exist = true
+						table.Append([]string{strconv.Itoa(int(ing.Id)), ing.Name, "Ingress", a.Name, ns.Name, ing.User, ing.CreateTime.String()})
+					}
+				}
+
+			}
+		}
+	}
+	if exist {
+		table.Render()
+	}
+}
+
+func (g *GetProxy) checkNS() (list []model.Namespace) {
+	ns := model.GetNamespaceBody()
+	if ns == nil {
+		return
+	}
+	if g.Option.NS != "" {
+		for _, n := range ns.Data.Namespaces {
+			if n.Name == g.Option.NS {
+				list = append(list, n)
+			}
+		}
+	} else {
+		for _, n := range ns.Data.Namespaces {
+			list = append(list, n)
+		}
+	}
+	if len(list) == 0 {
+		logger.Error("Empty namespace list")
+	}
+	return
 }
