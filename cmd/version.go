@@ -20,7 +20,8 @@ var versionData = `khadijah: A client tool for Kubernetes via Wayne.
   language  :  %s
   platform  :  %s/%s
   CPU       :  %d
-  Goroutine :  %d`
+  Goroutine :  %d
+`
 
 func versionE(cmd *cobra.Command, args []string) {
 	fmt.Printf(versionData, config.GlobalOption.System.Version, runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.NumCPU(), runtime.NumGoroutine())
