@@ -72,6 +72,16 @@ type Service struct {
 	App        App        `json:"app"`
 }
 
+type Ingress struct {
+	Id         int64      `json:"id"`
+	Name       string     `json:"name"`
+	Metadata   string     `json:"metadata"`
+	CreateTime *time.Time `json:"createTime"`
+	UpdateTime *time.Time `json:"updateTime"`
+	User       string     `json:"user"`
+	App        App        `json:"app"`
+}
+
 type Metadata struct {
 	Namespace string   `json:"namespace"`
 	Clusters  []string `json:"clusters"`
