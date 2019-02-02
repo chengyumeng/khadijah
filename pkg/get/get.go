@@ -25,26 +25,26 @@ func NewProxy(opt Option) GetProxy {
 }
 
 func (g *GetProxy) Get() {
-	if g.Option.Pod {
+	if g.Option.Option.Pod {
 		g.GetPod(model.DeploymentType)
 		g.GetPod(model.StatefulsetType)
 		g.GetPod(model.DaemonsetType)
 		g.GetPod(model.CronjobType)
-	} else if g.Option.Deployment {
+	} else if g.Option.Option.Deployment {
 		g.GetPod(model.DeploymentType)
-	} else if g.Option.Daemonset {
+	} else if g.Option.Option.DaemonSet {
 		g.GetPod(model.DaemonsetType)
-	} else if g.Option.Statefulset {
+	} else if g.Option.Option.Statefulset {
 		g.GetPod(model.StatefulsetType)
-	} else if g.Option.Cronjob {
+	} else if g.Option.Option.Cronjob {
 		g.GetPod(model.CronjobType)
-	} else if g.Option.Service {
+	} else if g.Option.Option.Service {
 		g.GetService()
-	} else if g.Option.Ingress {
+	} else if g.Option.Option.Ingress {
 		g.GetIngress()
-	} else if g.Option.Application {
+	} else if g.Option.Option.App {
 		g.getApp()
-	} else if g.Option.Namespace {
+	} else if g.Option.Option.Namespace {
 		g.getNamespace()
 	}
 }
@@ -59,7 +59,9 @@ func (g *GetProxy) getNamespace() {
 	table.SetHeader([]string{"Id", "Name", "User", "CreateTime", "UpdateTime"})
 
 	for _, v := range data.Data.Namespaces {
-		table.Append([]string{strconv.Itoa(int(v.Id)), v.Name, v.User, v.CreateTime.String(), v.UpdateTime.String()})
+		if g.Option.NS == "" || g.Option.NS == v.Name {
+			table.Append([]string{strconv.Itoa(int(v.Id)), v.Name, v.User, v.CreateTime.String(), v.UpdateTime.String()})
+		}
 	}
 	table.Render()
 }
@@ -76,7 +78,9 @@ func (g *GetProxy) getApp() {
 		}
 
 		for _, v := range data.Data.Apps {
-			table.Append([]string{strconv.Itoa(int(v.Id)), v.Name, v.Namespace, v.User, v.CreateTime.String()})
+			if g.Option.App == "" || g.Option.App == v.Name {
+				table.Append([]string{strconv.Itoa(int(v.Id)), v.Name, v.Namespace, v.User, v.CreateTime.String()})
+			}
 		}
 
 	}

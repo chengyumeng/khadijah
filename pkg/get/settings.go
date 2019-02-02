@@ -1,16 +1,10 @@
 package get
 
+import "github.com/chengyumeng/khadijah/pkg/utils/resource"
+
 type Option struct {
-	resource    string
-	Deployment  bool
-	Daemonset   bool
-	Statefulset bool
-	Pod         bool
-	Cronjob     bool
-	Service     bool
-	Ingress     bool
-	Application bool
-	Namespace   bool
-	NS          string
-	App         string
+	resource string
+	Option   *resource.Option
+	NS       string
+	App      string
 }

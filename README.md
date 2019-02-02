@@ -34,7 +34,7 @@ khadijah login -uadmin -padmin
 ```
 
 ```bash
-khadijah get --namespace
+khadijah get namespace
 Name: admin Email:admin@360.cn
 
 +----+--------------+-----------------+-------------------------------+-------------------------------+
@@ -45,7 +45,7 @@ Name: admin Email:admin@360.cn
 ```
 
 ```bash
-khadijah get --deployment -n=infra
+khadijah get deployment -n=infra
 +-----+----------------------------------------+------------+-----+-----------+-------------+-------------------------------+
 | ID  |                  NAME                  |    TYPE    | APP | NAMESPACE |    USER     |          CREATETIME           |
 +-----+----------------------------------------+------------+-----+-----------+-------------+-------------------------------+

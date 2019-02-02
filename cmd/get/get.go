@@ -1,8 +1,10 @@
 package get
 
 import (
-	"github.com/chengyumeng/khadijah/pkg/get"
 	"github.com/spf13/cobra"
+
+	"github.com/chengyumeng/khadijah/pkg/get"
+	"github.com/chengyumeng/khadijah/pkg/utils/resource"
 )
 
 var option get.Option
@@ -22,8 +24,9 @@ Valid resource types include:
 * application
 
 And you can set ns/app as a filter.`,
-	Example: `khadijah get --deployment --ns=default`,
+	Example: `khadijah get deployment --ns=default`,
 	Run: func(cmd *cobra.Command, args []string) {
+		option.Option = resource.ParserArgs(args)
 		proxy := get.NewProxy(option)
 		proxy.Get()
 	},
@@ -31,14 +34,6 @@ And you can set ns/app as a filter.`,
 
 func init() {
 	GetCmd.Flags().SortFlags = false
-	GetCmd.Flags().StringVarP(&option.NS, "ns", "n", "", "Wayne namespace filter.")
-	GetCmd.Flags().StringVarP(&option.App, "app", "a", "", "Wayne application filter.")
-	GetCmd.Flags().BoolVarP(&option.Deployment, "deployment", "d", false, "Whether to output deployment list.")
-	GetCmd.Flags().BoolVarP(&option.Daemonset, "daemonset", "", false, "Whether to output daemonset list.")
-	GetCmd.Flags().BoolVarP(&option.Statefulset, "statefulset", "", false, "Whether to output statefulset list.")
-	GetCmd.Flags().BoolVarP(&option.Service, "service", "s", false, "Whether to output service list.")
-	GetCmd.Flags().BoolVarP(&option.Ingress, "ingress", "i", false, "Whether to output ingress list.")
-	GetCmd.Flags().BoolVarP(&option.Cronjob, "cronjob", "c", false, "Whether to output cronjob list.")
-	GetCmd.Flags().BoolVarP(&option.Namespace, "namespace", "", false, "Whether to output namespace list.")
-	GetCmd.Flags().BoolVarP(&option.Application, "application", "", false, "Whether to output application list.")
+	GetCmd.Flags().StringVarP(&option.NS, "namespace", "n", "", "Wayne namespace filter.")
+	GetCmd.Flags().StringVarP(&option.App, "application", "a", "", "Wayne application filter.")
 }
