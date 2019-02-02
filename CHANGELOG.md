@@ -1,4 +1,10 @@
 
+0.0.5 / 2019-02-02
+==================
+
+  * Make it better of  user document
+  * Make get command be better
+
 0.0.4 / 2019-02-01
 ==================
 
