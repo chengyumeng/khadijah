@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"runtime"
+
+	"github.com/spf13/cobra"
 
 	"github.com/chengyumeng/khadijah/pkg/config"
-	"github.com/spf13/cobra"
-	"runtime"
 )
 
 var versionCmd = &cobra.Command{
