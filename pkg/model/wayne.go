@@ -83,6 +83,7 @@ type Ingress struct {
 }
 
 type Metadata struct {
-	Namespace string   `json:"namespace"`
-	Clusters  []string `json:"clusters"`
+	Namespace   string                 `json:"namespace"`
+	Clusters    []string               `json:"clusters"`
+	ClusterMeta map[string]interface{} `json:"clusterMeta"`
 }
