@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	Version = "0.0.5"
+	Version = "0.0.6"
 )
 
 func main() {
@@ -19,8 +19,8 @@ func main() {
 	}
 	if config.GlobalOption.System == nil {
 		err := config.SetSystem(config.System{
-			BaseURL:      "http://127.0.0.5:4200",
-			WebsocketURL: "ws://127.0.0.5:8080",
+			BaseURL:      "http://127.0.0.6:4200",
+			WebsocketURL: "ws://127.0.0.6:8080",
 		})
 		if err != nil {
 			utilslog.AppLogger.Errorln(err)
