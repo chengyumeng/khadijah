@@ -83,6 +83,18 @@ func (g *DescribeProxy) showResourceState(name string) {
 			logger.Errorln(err)
 			return
 		}
+		if len(kns.Clusters) == 0 {
+			if len(kns.ClusterMeta) > 0 {
+				for k, _ := range kns.ClusterMeta {
+					kns.Clusters = append(kns.Clusters, k)
+				}
+			} else if g.Option.Cluster == "" {
+				logger.Warningln("You should insert cluster info!")
+				return
+			} else {
+				kns.Clusters = append(kns.Clusters, g.Option.Cluster)
+			}
+		}
 		for _, cluster := range kns.Clusters {
 			if cluster == g.Option.Cluster || g.Option.Cluster == "" {
 				data := kubernetes.GetResourceBody(name, int64(0), kns.Namespace, cluster, g.Option.resource, "")
@@ -95,6 +107,17 @@ func (g *DescribeProxy) showResourceState(name string) {
 					}
 					fmt.Println(string(data))
 				case JSON:
+					var v interface{}
+					err := json.Unmarshal(data, &v)
+					if err != nil {
+						logger.Errorln(err)
+						return
+					}
+					data, err := json.MarshalIndent(v, "", " ")
+					if err != nil {
+						logger.Errorln(err)
+						return
+					}
 					fmt.Println(string(data))
 				case PRETTY:
 					switch g.Option.resource {

@@ -24,7 +24,7 @@ func init() {
 	DescribeCmd.Flags().StringVarP(&option.Namespace, "namespace", "n", "", "Wayne namespace(their is some different from kubernetes namespace).")
 	DescribeCmd.Flags().StringVarP(&option.Pod, "pod", "", "", "Kubernetes pod name.")
 	DescribeCmd.Flags().StringVarP(&option.Deployment, "deployment", "d", "", "Wayne deployment name.")
-	DescribeCmd.Flags().StringVarP(&option.Daemontset, "daemontset", "", "", "Wayne daemonset name.")
+	DescribeCmd.Flags().StringVarP(&option.Daemontset, "daemonset", "", "", "Wayne daemonset name.")
 	DescribeCmd.Flags().StringVarP(&option.Statefulset, "statefulset", "", "", "Wayne statefulset name.")
 	DescribeCmd.Flags().StringVarP(&option.Service, "service", "", "", "Wayne service name.")
 	DescribeCmd.Flags().StringVarP(&option.Configmap, "configmap", "", "", "Wayne configmap name.")
