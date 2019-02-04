@@ -1,4 +1,13 @@
 
+0.1.0 / 2019-02-04
+==================
+
+  * Fix go test bug
+  * Add new table style to describe command and use private table library
+  * Add new table style to get command and use private table library
+  * Add row num to table
+  * Add basic table class that can set Horizontal/Vertical table
+
 0.0.7 / 2019-02-04
 ==================
 
