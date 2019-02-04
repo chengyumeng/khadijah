@@ -7,4 +7,5 @@ type Option struct {
 	Option   *resource.Option
 	NS       string
 	App      string
+	Output   string
 }

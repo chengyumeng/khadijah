@@ -2,28 +2,38 @@ package get
 
 import (
 	"fmt"
-	"os"
 	"strconv"
-
-	"github.com/gosuri/uitable"
-	"github.com/olekukonko/tablewriter"
 
 	"github.com/chengyumeng/khadijah/pkg/model"
 	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
+	"github.com/chengyumeng/khadijah/pkg/utils/table"
 )
 
 var (
 	logger = utillog.NewAppLogger("pkg/get")
 )
 
+const ROW = "row"
+const PRETTY = "pretty"
+
 type GetProxy struct {
 	Option Option
+	table  table.Table
 }
 
 func NewProxy(opt Option) GetProxy {
-	return GetProxy{
+	prx := GetProxy{
 		Option: opt,
 	}
+	switch prx.Option.Output {
+	case PRETTY:
+		prx.table = table.NewTable(table.Horizontal)
+	case ROW:
+		prx.table = table.NewTable(table.Vertical)
+	default:
+		prx.table = table.NewTable(table.Horizontal)
+	}
+	return prx
 }
 
 func (g *GetProxy) Get() {
@@ -53,28 +63,34 @@ func (g *GetProxy) Get() {
 	}
 }
 
+func (g *GetProxy) print() {
+	if g.table.IsEmpty() {
+		logger.Warningln("There is no data in the table!")
+	} else {
+		g.table.Println()
+	}
+}
+
 func (g *GetProxy) getNamespace() {
 	data := model.GetNamespaceBody()
 	if data == nil {
 		return
 	}
 	fmt.Printf("Name: %s Email:%s\n\n", data.Data.Name, data.Data.Email)
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Id", "Name", "User", "CreateTime", "UpdateTime"})
+	g.table.SetHeaders([]string{"Id", "Name", "User", "CreateTime", "UpdateTime"})
 
 	for _, v := range data.Data.Namespaces {
 		if g.Option.NS == "" || g.Option.NS == v.Name {
-			table.Append([]string{strconv.Itoa(int(v.Id)), v.Name, v.User, v.CreateTime.String(), v.UpdateTime.String()})
+			g.table.AddRow([]string{strconv.Itoa(int(v.Id)), v.Name, v.User, v.CreateTime.String(), v.UpdateTime.String()})
 		}
 	}
-	table.Render()
+	g.print()
 }
 
 func (g *GetProxy) getApp() {
 	list := g.checkNS()
 
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Id", "Name", "Namespace", "User", "CreateTime"})
+	g.table.SetHeaders([]string{"Id", "Name", "Namespace", "User", "CreateTime"})
 	for _, ns := range list {
 		data := model.GetAppBody(ns.Id)
 		if data == nil {
@@ -83,66 +99,55 @@ func (g *GetProxy) getApp() {
 
 		for _, v := range data.Data.Apps {
 			if g.Option.App == "" || g.Option.App == v.Name {
-				table.Append([]string{strconv.Itoa(int(v.Id)), v.Name, v.Namespace, v.User, v.CreateTime.String()})
+				g.table.AddRow([]string{strconv.Itoa(int(v.Id)), v.Name, v.Namespace, v.User, v.CreateTime.String()})
 			}
 		}
 
 	}
-	table.Render()
+	g.print()
 }
 
 func (g *GetProxy) GetPod(podType string) {
 	list := g.checkNS()
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
-	exist := false
+	g.table.SetHeaders([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	for _, ns := range list {
 		if app := model.GetAppBody(ns.Id); app != nil {
 			for _, a := range app.Data.Apps {
 				if g.Option.App == "" || g.Option.App == a.Name {
 					data := model.GetPodBody(a.Id, podType)
 					for _, pod := range data.Data.Pods {
-						exist = true
-						table.Append([]string{strconv.Itoa(int(pod.Id)), pod.Name, podType, pod.App.Name, pod.App.NSMetaData.Name, pod.User, pod.CreateTime.String()})
+						g.table.AddRow([]string{strconv.Itoa(int(pod.Id)), pod.Name, podType, pod.App.Name, pod.App.NSMetaData.Name, pod.User, pod.CreateTime.String()})
 					}
 				}
 			}
 		}
 
 	}
-	if exist {
-		table.Render()
-	}
+	g.print()
 }
 
 func (g *GetProxy) GetService() {
 	list := g.checkNS()
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
-	exist := false
+	g.table.SetHeaders([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	for _, ns := range list {
 		if app := model.GetAppBody(ns.Id); app != nil {
 			for _, a := range app.Data.Apps {
 				if g.Option.App == "" || g.Option.App == a.Name {
 					data := model.GetServiceBody(a.Id)
 					for _, svc := range data.Data.Services {
-						exist = true
-						table.Append([]string{strconv.Itoa(int(svc.Id)), svc.Name, model.ServiceType, a.Name, ns.Name, svc.User, svc.CreateTime.String()})
+						g.table.AddRow([]string{strconv.Itoa(int(svc.Id)), svc.Name, model.ServiceType, a.Name, ns.Name, svc.User, svc.CreateTime.String()})
 					}
 				}
 
 			}
 		}
 	}
-	if exist {
-		table.Render()
-	}
+	g.print()
 }
 
 func (g *GetProxy) GetIngress() {
 	list := g.checkNS()
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
+	g.table.SetHeaders([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	exist := false
 	for _, ns := range list {
 		if app := model.GetAppBody(ns.Id); app != nil {
@@ -151,7 +156,7 @@ func (g *GetProxy) GetIngress() {
 					data := model.GetIngressBody(a.Id)
 					for _, ing := range data.Data.Ingresses {
 						exist = true
-						table.Append([]string{strconv.Itoa(int(ing.Id)), ing.Name, "Ingress", a.Name, ns.Name, ing.User, ing.CreateTime.String()})
+						g.table.AddRow([]string{strconv.Itoa(int(ing.Id)), ing.Name, "Ingress", a.Name, ns.Name, ing.User, ing.CreateTime.String()})
 					}
 				}
 
@@ -159,27 +164,18 @@ func (g *GetProxy) GetIngress() {
 		}
 	}
 	if exist {
-		table.Render()
+		g.table.Println()
 	}
 }
 
 func (g *GetProxy) GetAPIKey() {
-	table := uitable.New()
-	//table.MaxColWidth = 80
-	table.Wrap = true // wrap columns
-
 	data := model.GetAPIKeyBody(0)
+	g.table.SetHeaders([]string{"ID", "Name", "Type", "Resource ID", "User", "Description", "Token"})
 	for _, api := range data.Data.APIkeys {
-		table.AddRow("Id:", strconv.Itoa(int(api.Id)))
-		table.AddRow("Name:", api.Name)
-		table.AddRow("Type:", strconv.Itoa(api.Type))
-		table.AddRow("Resource ID:", strconv.Itoa(int(api.ResourceId)))
-		table.AddRow("User:", api.User)
-		table.AddRow("Description:", api.Description)
-		table.AddRow("Token:", api.Token)
-		table.AddRow("") // blank
+		g.table.AddRow([]string{strconv.Itoa(int(api.Id)), api.Name,
+			strconv.Itoa(api.Type), strconv.Itoa(int(api.ResourceId)), api.User, api.Description, api.Token})
 	}
-	fmt.Println(table)
+	g.print()
 }
 
 func (g *GetProxy) checkNS() (list []model.Namespace) {
