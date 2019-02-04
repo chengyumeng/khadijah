@@ -11,6 +11,7 @@ type Option struct {
 	Ingress     bool
 	Pod         bool
 	Cronjob     bool
+	APIkey      bool
 }
 
 func ParserArgs(args []string) *Option {
@@ -36,6 +37,8 @@ func ParserArgs(args []string) *Option {
 			return &Option{Pod: true}
 		case "Cronjob", "cronjob":
 			return &Option{Cronjob: true}
+		case "APIkey", "apikey", "api", "API", "key", "Key", "k":
+			return &Option{APIkey: true}
 		default:
 			return nil
 		}

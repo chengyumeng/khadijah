@@ -5,9 +5,11 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/gosuri/uitable"
+	"github.com/olekukonko/tablewriter"
+
 	"github.com/chengyumeng/khadijah/pkg/model"
 	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
-	"github.com/olekukonko/tablewriter"
 )
 
 var (
@@ -46,6 +48,8 @@ func (g *GetProxy) Get() {
 		g.getApp()
 	} else if g.Option.Option.Namespace {
 		g.getNamespace()
+	} else if g.Option.Option.APIkey {
+		g.GetAPIKey()
 	}
 }
 
@@ -157,6 +161,25 @@ func (g *GetProxy) GetIngress() {
 	if exist {
 		table.Render()
 	}
+}
+
+func (g *GetProxy) GetAPIKey() {
+	table := uitable.New()
+	//table.MaxColWidth = 80
+	table.Wrap = true // wrap columns
+
+	data := model.GetAPIKeyBody(0)
+	for _, api := range data.Data.APIkeys {
+		table.AddRow("Id:", strconv.Itoa(int(api.Id)))
+		table.AddRow("Name:", api.Name)
+		table.AddRow("Type:", strconv.Itoa(api.Type))
+		table.AddRow("Resource ID:", strconv.Itoa(int(api.ResourceId)))
+		table.AddRow("User:", api.User)
+		table.AddRow("Description:", api.Description)
+		table.AddRow("Token:", api.Token)
+		table.AddRow("") // blank
+	}
+	fmt.Println(table)
 }
 
 func (g *GetProxy) checkNS() (list []model.Namespace) {

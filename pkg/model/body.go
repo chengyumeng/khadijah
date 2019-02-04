@@ -34,3 +34,10 @@ type IngressBody struct {
 		Ingresses []Ingress `json:"list"`
 	} `json:"data"`
 }
+
+type APIKeyBody struct {
+	Data struct {
+		Page
+		APIkeys []APIKey `json:"list"`
+	}
+}
