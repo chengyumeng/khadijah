@@ -39,5 +39,5 @@ func init() {
 	GetCmd.Flags().SortFlags = false
 	GetCmd.Flags().StringVarP(&option.NS, "namespace", "n", "", "Wayne namespace filter.")
 	GetCmd.Flags().StringVarP(&option.App, "application", "a", "", "Wayne application filter.")
-	GetCmd.Flags().StringVarP(&option.Output, "output", "o", "pretty", fmt.Sprintf("Support for the following types:%s,%s,%s.", get.ROW, get.PRETTY, get.ROW))
+	GetCmd.Flags().StringVarP(&option.Output, "output", "o", "pretty", fmt.Sprintf("Support for the following types:%s,%s.", get.ROW, get.PRETTY))
 }
