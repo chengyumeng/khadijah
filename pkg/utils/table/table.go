@@ -59,7 +59,8 @@ func (t *table) Println() {
 		table := uitable.New()
 		//table.MaxColWidth = 200
 		table.Wrap = true // wrap columns
-		for _, r := range t.Rows {
+		for i, r := range t.Rows {
+			table.AddRow(fmt.Sprintf("*** %d ***", i)) // blank
 			for k, v := range r {
 				table.AddRow(fmt.Sprintf("%s:", t.Headers[k]), v)
 			}
