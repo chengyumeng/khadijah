@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/ghodss/yaml"
-	
+
 	"github.com/chengyumeng/khadijah/pkg/model"
 	"github.com/chengyumeng/khadijah/pkg/model/kubernetes"
 	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
