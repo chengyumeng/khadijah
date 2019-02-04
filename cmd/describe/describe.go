@@ -29,6 +29,6 @@ func init() {
 	DescribeCmd.Flags().StringVarP(&option.Service, "service", "", "", "Wayne service name.")
 	DescribeCmd.Flags().StringVarP(&option.Configmap, "configmap", "", "", "Wayne configmap name.")
 	DescribeCmd.Flags().StringVarP(&option.Ingress, "ingress", "i", "", "Wayne ingress name.")
-	DescribeCmd.Flags().StringVarP(&option.Output, "output", "o", "json", fmt.Sprintf("Support for the following types:%s,%s,%s.", describe.JSON, describe.YAML, describe.PRETTY))
+	DescribeCmd.Flags().StringVarP(&option.Output, "output", "o", "json", fmt.Sprintf("Support for the following types:%s,%s,%s,%s.", describe.JSON, describe.YAML, describe.PRETTY, describe.ROW))
 	DescribeCmd.Flags().StringVarP(&option.Cluster, "cluster", "c", "", "Wayne cluster name.")
 }
