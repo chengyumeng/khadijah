@@ -1,4 +1,10 @@
 
+0.0.7 / 2019-02-04
+==================
+
+  * Add get apikey API
+  * Add New Column Table Libiary
+
 0.0.6 / 2019-02-03
 ==================
 
