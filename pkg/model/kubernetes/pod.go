@@ -34,6 +34,7 @@ func GetResourceBody(resource string, appId int64, namespace string, cluster str
 	}
 	if res.StatusCode != http.StatusOK {
 		logger.Warning(string(body))
+		return nil
 	}
 	return body
 }

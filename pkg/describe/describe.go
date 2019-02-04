@@ -109,6 +109,9 @@ func (g *DescribeProxy) showResourceState(name string) {
 		for _, cluster := range kns.Clusters {
 			if cluster == g.Option.Cluster || g.Option.Cluster == "" {
 				data := kubernetes.GetResourceBody(name, int64(0), kns.Namespace, cluster, g.Option.resource, "")
+				if data == nil {
+					continue
+				}
 				switch g.Option.Output {
 				case YAML:
 					data, err := yaml.JSONToYAML(data)
@@ -139,20 +142,30 @@ func (g *DescribeProxy) showResourceState(name string) {
 							arr = append(arr, p.Name)
 						}
 						g.table.SetHeaders(DeploymentHeader)
-						g.table.AddRow(append(g.createDeploymentLine(data, cluster), strings.Join(arr, ",")))
+						if line := g.createDeploymentLine(data, cluster); len(line) > 0 {
+							g.table.AddRow(append(line, strings.Join(arr, ",")))
+						}
 					case model.ServiceType:
 						g.table.SetHeaders(ServiceHeader)
-						g.table.AddRow(g.createServiceLine(data, cluster))
+						if line := g.createServiceLine(data, cluster); len(line) > 0 {
+							g.table.AddRow(line)
+						}
 					case model.IngressType:
 						g.table.SetHeaders(IngressHeader)
-						g.table.AddRow(g.createIngressLine(data, cluster))
+						if line := g.createIngressLine(data, cluster); len(line) > 0 {
+							g.table.AddRow(line)
+						}
 					case model.ConfigmapType:
 						g.table.SetHeaders(ConfigmapHeader)
-						g.table.AddRow(g.createConfigmapLine(data, cluster))
+						if line := g.createConfigmapLine(data, cluster); len(line) > 0 {
+							g.table.AddRow(line)
+						}
 					case model.PodType:
 						g.table.SetHeaders(PodHeader)
 						pods := kubernetes.GetPod(int64(0), kns.Namespace, cluster, g.Option.Pod)
-						g.table.AddRow(g.createPodLine(pods.Data, cluster))
+						if line := g.createPodLine(pods.Data, cluster); len(line) > 0 {
+							g.table.AddRow(line)
+						}
 					default:
 						logger.Warningln(g.Option.resource)
 					}
@@ -160,7 +173,9 @@ func (g *DescribeProxy) showResourceState(name string) {
 			}
 		}
 	}
-	g.print()
+	if g.Option.Output == PRETTY || g.Option.Output == ROW {
+		g.print()
+	}
 }
 
 func (g *DescribeProxy) print() {
