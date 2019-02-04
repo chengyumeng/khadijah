@@ -80,13 +80,7 @@ func (g *DescribeProxy) Describe() {
 }
 
 func (g *DescribeProxy) showResourceState(name string) {
-	data := model.GetNamespaceBody()
-	nslist := []model.Namespace{}
-	for _, ns := range data.Data.Namespaces {
-		if ns.Name == g.Option.Namespace || g.Option.Namespace == "" {
-			nslist = append(nslist, ns)
-		}
-	}
+	nslist := g.checkNS()
 	for _, ns := range nslist {
 		kns := new(model.Metadata)
 		err := json.Unmarshal([]byte(ns.Metadata), &kns)
@@ -260,4 +254,26 @@ func (g *DescribeProxy) createConfigmapLine(data []byte, cluster string) []strin
 	return []string{obj.Data.ObjectMeta.Name,
 		obj.Data.ObjectMeta.Namespace, cluster,
 		stringobj.Map2list(obj.Data.ObjectMeta.Labels)}
+}
+
+func (g *DescribeProxy) checkNS() (list []model.Namespace) {
+	ns := model.GetNamespaceBody()
+	if ns == nil {
+		return
+	}
+	if g.Option.Namespace != "" {
+		for _, n := range ns.Data.Namespaces {
+			if n.Name == g.Option.Namespace {
+				list = append(list, n)
+			}
+		}
+	} else {
+		for _, n := range ns.Data.Namespaces {
+			list = append(list, n)
+		}
+	}
+	if len(list) == 0 {
+		logger.Error("Empty namespace list")
+	}
+	return
 }
