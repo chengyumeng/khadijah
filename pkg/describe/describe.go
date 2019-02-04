@@ -3,20 +3,23 @@ package describe
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 
+	"github.com/ghodss/yaml"
+	
 	"github.com/chengyumeng/khadijah/pkg/model"
 	"github.com/chengyumeng/khadijah/pkg/model/kubernetes"
 	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/chengyumeng/khadijah/pkg/utils/stringobj"
-	"github.com/ghodss/yaml"
-	"github.com/olekukonko/tablewriter"
+	"github.com/chengyumeng/khadijah/pkg/utils/table"
 )
 
-const YAML = "yaml"
-const JSON = "json"
-const PRETTY = "pretty"
+const (
+	YAML   = "yaml"
+	JSON   = "json"
+	PRETTY = "pretty"
+	ROW    = "row"
+)
 
 var (
 	DeploymentHeader = []string{"Name", "Namespace", "Cluster", "Labels", "Containers", "Replicas", "Message", "Pods"}
@@ -30,12 +33,22 @@ var (
 
 type DescribeProxy struct {
 	Option Option
+	table  table.Table
 }
 
 func NewProxy(opt Option) DescribeProxy {
-	return DescribeProxy{
+	prx := DescribeProxy{
 		Option: opt,
 	}
+	switch prx.Option.Output {
+	case PRETTY:
+		prx.table = table.NewTable(table.Horizontal)
+	case ROW:
+		prx.table = table.NewTable(table.Vertical)
+	default:
+		//
+	}
+	return prx
 }
 
 func (g *DescribeProxy) Describe() {
@@ -74,8 +87,6 @@ func (g *DescribeProxy) showResourceState(name string) {
 			nslist = append(nslist, ns)
 		}
 	}
-	tb := [][]string{}
-	var header []string
 	for _, ns := range nslist {
 		kns := new(model.Metadata)
 		err := json.Unmarshal([]byte(ns.Metadata), &kns)
@@ -119,7 +130,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 						return
 					}
 					fmt.Println(string(data))
-				case PRETTY:
+				case PRETTY, ROW:
 					switch g.Option.resource {
 					case model.DeploymentType, model.DaemonsetType, model.StatefulsetType:
 						pods := kubernetes.ListPods(int64(0), kns.Namespace, cluster, "?"+g.Option.resource+"="+g.Option.Deployment)
@@ -127,21 +138,21 @@ func (g *DescribeProxy) showResourceState(name string) {
 						for _, p := range pods.Data {
 							arr = append(arr, p.Name)
 						}
-						tb = append(tb, append(g.createDeploymentLine(data, cluster), strings.Join(arr, ",")))
-						header = DeploymentHeader
+						g.table.SetHeaders(DeploymentHeader)
+						g.table.AddRow(append(g.createDeploymentLine(data, cluster), strings.Join(arr, ",")))
 					case model.ServiceType:
-						header = ServiceHeader
-						tb = append(tb, g.createServiceLine(data, cluster))
+						g.table.SetHeaders(ServiceHeader)
+						g.table.AddRow(g.createServiceLine(data, cluster))
 					case model.IngressType:
-						header = IngressHeader
-						tb = append(tb, g.createIngressLine(data, cluster))
+						g.table.SetHeaders(IngressHeader)
+						g.table.AddRow(g.createIngressLine(data, cluster))
 					case model.ConfigmapType:
-						header = ConfigmapHeader
-						tb = append(tb, g.createConfigmapLine(data, cluster))
+						g.table.SetHeaders(ConfigmapHeader)
+						g.table.AddRow(g.createConfigmapLine(data, cluster))
 					case model.PodType:
+						g.table.SetHeaders(PodHeader)
 						pods := kubernetes.GetPod(int64(0), kns.Namespace, cluster, g.Option.Pod)
-						tb = append(tb, g.createPodLine(pods.Data, cluster))
-						header = PodHeader
+						g.table.AddRow(g.createPodLine(pods.Data, cluster))
 					default:
 						logger.Warningln(g.Option.resource)
 					}
@@ -149,18 +160,15 @@ func (g *DescribeProxy) showResourceState(name string) {
 			}
 		}
 	}
-	if len(tb) > 0 {
-		g.printTable(header, tb)
-	}
+	g.print()
 }
 
-func (g *DescribeProxy) printTable(header []string, lines [][]string) {
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader(header)
-	table.SetRowLine(true)
-	table.SetRowSeparator("-")
-	table.AppendBulk(lines)
-	table.Render()
+func (g *DescribeProxy) print() {
+	if g.table.IsEmpty() {
+		logger.Warningln("There is no data in the table!")
+	} else {
+		g.table.Println()
+	}
 }
 
 func (g *DescribeProxy) createPodLine(pod *kubernetes.Pod, cluster string) []string {
