@@ -82,6 +82,31 @@ type Ingress struct {
 	App        App        `json:"app"`
 }
 
+type APIKey struct {
+	Id    int64  `json:"id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Token string `json:"token,omitempty"`
+	// 0：全局 1：命名空间 2：项目
+	Type        int        `json:"type"`
+	ResourceId  int64      `json:"resourceId,omitempty"`
+	Group       *Group     `json:"group,omitempty"`
+	Description string     `json:"description,omitempty"`
+	User        string     `json:"user,omitempty"`
+	ExpireIn    int64      `json:"expireIn"`          // 过期时间，单位：秒
+	Deleted     bool       `json:"deleted,omitempty"` // 是否生效
+	CreateTime  *time.Time `json:"createTime,omitempty"`
+	UpdateTime  *time.Time `json:"updateTime,omitempty"`
+}
+
+type Group struct {
+	Id         int64      `json:"id,omitempty"`
+	Name       string     `json:"name,omitempty"`
+	Comment    string     `json:"comment,omitempty"`
+	Type       int        `json:"type"`
+	CreateTime *time.Time `json:"createTime,omitempty"`
+	UpdateTime *time.Time `json:"updateTime,omitempty"`
+}
+
 type Metadata struct {
 	Namespace   string                 `json:"namespace"`
 	Clusters    []string               `json:"clusters"`

@@ -35,3 +35,7 @@ ignored = ["golang.org/*","k8s.io/apimachinery*"]
 [[constraint]]
   name = "github.com/smartystreets/goconvey"
   version = "1.6.3"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gosuri/uitable"

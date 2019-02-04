@@ -22,6 +22,7 @@ Valid resource types include:
 * cronjob
 * namespace
 * application
+* apikey
 
 And you can set ns/app as a filter.`,
 	Example: `khadijah get deployment --ns=default`,

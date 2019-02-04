@@ -61,6 +61,18 @@
   version = "v1.4.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:b4e7b1e55d849b7d1a4d96d1a029141d7ac963b4403e6ddb1cdb6e5384ab4781"
+  name = "github.com/gosuri/uitable"
+  packages = [
+    ".",
+    "util/strutil",
+    "util/wordwrap",
+  ]
+  pruneopts = ""
+  revision = "36ee7e946282a3fb1cfecd476ddc9b35d8847e42"
+
+[[projects]]
   digest = "1:870d441fe217b8e689d7949fef6e43efbc787e50f200cb1e70dbca9204a1d6be"
   name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
@@ -204,6 +216,7 @@
     "github.com/ghodss/yaml",
     "github.com/gin-gonic/gin/json",
     "github.com/gorilla/websocket",
+    "github.com/gosuri/uitable",
     "github.com/olekukonko/tablewriter",
     "github.com/pkg/term",
     "github.com/smartystreets/goconvey/convey",
