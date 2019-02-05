@@ -1,4 +1,12 @@
 
+0.2.0 / 2019-02-05
+==================
+
+  * Change describe command style
+  * Add hash map check
+  * fix check ns in describe command
+  * Add check Nil
+
 0.1.1 / 2019-02-04
 ==================
 
