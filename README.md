@@ -56,7 +56,7 @@ khadijah get deployment -n=infra
 ```
 
 ```bash
-khadijah describe -n=infra -d=move-num1 -o=pretty
+khadijah describe deployment move-num1 -n=infra -o=pretty
 +-----------+-----------+---------+--------------------------------+------------------------------+----------+--------------------------------+---------------------------+
 |   NAME    | NAMESPACE | CLUSTER |             LABELS             |            CONTAINERS        | REPLICAS |            MESSAGE             |           PODS            |
 +-----------+-----------+---------+--------------------------------+------------------------------+----------+--------------------------------+---------------------------+
