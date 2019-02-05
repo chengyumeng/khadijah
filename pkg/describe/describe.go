@@ -9,6 +9,7 @@ import (
 
 	"github.com/chengyumeng/khadijah/pkg/model"
 	"github.com/chengyumeng/khadijah/pkg/model/kubernetes"
+	"github.com/chengyumeng/khadijah/pkg/utils/hash"
 	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/chengyumeng/khadijah/pkg/utils/stringobj"
 	"github.com/chengyumeng/khadijah/pkg/utils/table"
@@ -103,7 +104,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 		for _, cluster := range kns.Clusters {
 			if cluster == g.Option.Cluster || g.Option.Cluster == "" {
 				data := kubernetes.GetResourceBody(name, int64(0), kns.Namespace, cluster, g.Option.resource, "")
-				if data == nil {
+				if data == nil || !hash.SetIfNotExist([]string{string(data)}) {
 					continue
 				}
 				switch g.Option.Output {
