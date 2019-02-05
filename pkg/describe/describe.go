@@ -53,30 +53,30 @@ func NewProxy(opt Option) DescribeProxy {
 }
 
 func (g *DescribeProxy) Describe() {
-	if g.Option.Deployment != "" {
+	if g.Option.Option.Deployment != "" {
 		g.Option.resource = model.DeploymentType
-		g.showResourceState(g.Option.Deployment)
-	} else if g.Option.Daemontset != "" {
+		g.showResourceState(g.Option.Option.Deployment)
+	} else if g.Option.Option.Daemonset != "" {
 		g.Option.resource = model.DaemonsetType
-		g.showResourceState(g.Option.Daemontset)
-	} else if g.Option.Statefulset != "" {
+		g.showResourceState(g.Option.Option.Daemonset)
+	} else if g.Option.Option.Statefulset != "" {
 		g.Option.resource = model.StatefulsetType
-		g.showResourceState(g.Option.Statefulset)
-	} else if g.Option.Pod != "" {
+		g.showResourceState(g.Option.Option.Statefulset)
+	} else if g.Option.Option.Pod != "" {
 		g.Option.resource = model.PodType
-		g.showResourceState(g.Option.Pod)
-	} else if g.Option.Service != "" {
+		g.showResourceState(g.Option.Option.Pod)
+	} else if g.Option.Option.Service != "" {
 		g.Option.resource = model.ServiceType
-		g.showResourceState(g.Option.Service)
-	} else if g.Option.Ingress != "" {
+		g.showResourceState(g.Option.Option.Service)
+	} else if g.Option.Option.Ingress != "" {
 		g.Option.resource = model.IngressType
-		g.showResourceState(g.Option.Ingress)
-	} else if g.Option.Configmap != "" {
+		g.showResourceState(g.Option.Option.Ingress)
+	} else if g.Option.Option.Configmap != "" {
 		g.Option.resource = model.ConfigmapType
-		g.showResourceState(g.Option.Configmap)
-	} else if g.Option.Pod != "" {
+		g.showResourceState(g.Option.Option.Configmap)
+	} else if g.Option.Option.Pod != "" {
 		g.Option.resource = model.PodType
-		g.showResourceState(g.Option.Pod)
+		g.showResourceState(g.Option.Option.Pod)
 	}
 }
 
@@ -131,7 +131,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 				case PRETTY, ROW:
 					switch g.Option.resource {
 					case model.DeploymentType, model.DaemonsetType, model.StatefulsetType:
-						pods := kubernetes.ListPods(int64(0), kns.Namespace, cluster, "?"+g.Option.resource+"="+g.Option.Deployment)
+						pods := kubernetes.ListPods(int64(0), kns.Namespace, cluster, "?"+g.Option.resource+"="+g.Option.Option.Deployment)
 						arr := []string{}
 						for _, p := range pods.Data {
 							arr = append(arr, p.Name)
@@ -157,7 +157,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 						}
 					case model.PodType:
 						g.table.SetHeaders(PodHeader)
-						pods := kubernetes.GetPod(int64(0), kns.Namespace, cluster, g.Option.Pod)
+						pods := kubernetes.GetPod(int64(0), kns.Namespace, cluster, g.Option.Option.Pod)
 						if line := g.createPodLine(pods.Data, cluster); len(line) > 0 {
 							g.table.AddRow(line)
 						}
