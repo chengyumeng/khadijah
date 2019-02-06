@@ -4,8 +4,10 @@ import (
 	"time"
 )
 
-const PageSize int = 1024 * 1024 // 单页显示，不分页
+// Web 表单单页显示，不分页
+const PageSize int = 1024 * 1024
 
+// wayne 数据类型对照
 const (
 	NamespaceType   string = "namespace"
 	AppType         string = "app"
@@ -19,6 +21,7 @@ const (
 	ConfigmapType   string = "configmap"
 )
 
+// 用户个人信息
 type User struct {
 	Id      int64  `json:"id"`
 	Name    string `json:"name"`
@@ -27,6 +30,7 @@ type User struct {
 	Admin   bool   `json:"admin"`
 }
 
+// 命名空间基本数据结构
 type Namespace struct {
 	Id         int64      `json:"id"`
 	Name       string     `json:"name"`
@@ -36,6 +40,7 @@ type Namespace struct {
 	User       string     `json:"user"`
 }
 
+// 页码基本数据结构
 type Page struct {
 	PageNum    int64 `json:"pageNo"`
 	PageSize   int64 `json:"pageSize"`
@@ -43,6 +48,7 @@ type Page struct {
 	TotalCount int64 `json:"totalCount"`
 }
 
+// 应用基本数据结构
 type App struct {
 	Id         int64      `json:"id"`
 	Name       string     `json:"name"`
@@ -52,6 +58,7 @@ type App struct {
 	NSMetaData Namespace  `json:"namespace"`
 }
 
+// Pod 基本数据结构
 type Pod struct {
 	Id         int64      `json:"id"`
 	Name       string     `json:"name"`
@@ -62,6 +69,7 @@ type Pod struct {
 	App        App        `json:"app"`
 }
 
+// 负载均衡基本数据结构
 type Service struct {
 	Id         int64      `json:"id"`
 	Name       string     `json:"name"`
@@ -72,6 +80,7 @@ type Service struct {
 	App        App        `json:"app"`
 }
 
+// Ingress 基本数据结构
 type Ingress struct {
 	Id         int64      `json:"id"`
 	Name       string     `json:"name"`
@@ -82,6 +91,7 @@ type Ingress struct {
 	App        App        `json:"app"`
 }
 
+// APIKey 基本数据结构
 type APIKey struct {
 	Id    int64  `json:"id,omitempty"`
 	Name  string `json:"name,omitempty"`
@@ -98,6 +108,7 @@ type APIKey struct {
 	UpdateTime  *time.Time `json:"updateTime,omitempty"`
 }
 
+// 用户组基本数据结构
 type Group struct {
 	Id         int64      `json:"id,omitempty"`
 	Name       string     `json:"name,omitempty"`
@@ -107,6 +118,7 @@ type Group struct {
 	UpdateTime *time.Time `json:"updateTime,omitempty"`
 }
 
+// 个性化数据
 type Metadata struct {
 	Namespace   string                 `json:"namespace"`
 	Clusters    []string               `json:"clusters"`

@@ -10,12 +10,13 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/model"
 	"github.com/chengyumeng/khadijah/pkg/model/kubernetes"
 	"github.com/chengyumeng/khadijah/pkg/utils/hash"
-	utillog "github.com/chengyumeng/khadijah/pkg/utils/log"
+	"github.com/chengyumeng/khadijah/pkg/utils/log"
 	"github.com/chengyumeng/khadijah/pkg/utils/stringobj"
 	"github.com/chengyumeng/khadijah/pkg/utils/table"
 )
 
 const (
+	// Print data type
 	YAML   = "yaml"   // Print data with yaml type.
 	JSON   = "json"   // Print data with json type.
 	PRETTY = "pretty" // Print data with table type.
@@ -29,9 +30,10 @@ var (
 	configmapHeader  = []string{"Name", "Namespace", "Cluster", "Labels"}
 	podHeader        = []string{"Name", "Namespace", "Cluster", "PodIP", "Node", "Restart Time", "Start Time"}
 
-	logger = utillog.NewAppLogger("pkg/describe")
+	logger = log.NewAppLogger("pkg/describe")
 )
 
+// wayne describe proxy interface
 type DescribeProxy struct {
 	Option Option
 	table  table.Table
@@ -93,7 +95,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 		}
 		if len(kns.Clusters) == 0 {
 			if len(kns.ClusterMeta) > 0 {
-				for k, _ := range kns.ClusterMeta {
+				for k := range kns.ClusterMeta {
 					kns.Clusters = append(kns.Clusters, k)
 				}
 			} else if g.Option.Cluster == "" {
