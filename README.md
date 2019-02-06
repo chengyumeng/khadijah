@@ -19,7 +19,7 @@ Khadijah 是一款基于奇虎 360 开源的 Wayne 的 kubernetes 命令行管�
 ## 快速安装
 
 ```bash
-go get github.com/chengyumeng/khadijah
+go get -u github.com/chengyumeng/khadijah
 ```
 
 ```bash
