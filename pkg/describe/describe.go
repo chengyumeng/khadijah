@@ -116,18 +116,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 					}
 					fmt.Println(string(data))
 				case JSON:
-					var v interface{}
-					err := json.Unmarshal(data, &v)
-					if err != nil {
-						logger.Errorln(err)
-						return
-					}
-					data, err := json.MarshalIndent(v, "", " ")
-					if err != nil {
-						logger.Errorln(err)
-						return
-					}
-					fmt.Println(string(data))
+					fmt.Println(string(stringobj.String2Json(data)))
 				case PRETTY, ROW:
 					switch g.Option.resource {
 					case model.DeploymentType, model.DaemonsetType, model.StatefulsetType:
