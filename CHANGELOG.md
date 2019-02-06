@@ -1,4 +1,10 @@
 
+0.2.1 / 2019-02-06
+==================
+
+  * Add infomation print in khadijah config set command
+  * Abstract Json serialized function
+
 0.2.0 / 2019-02-05
 ==================
 
