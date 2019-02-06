@@ -8,12 +8,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var option describe.Option
-
-var DescribeCmd = &cobra.Command{
-	Use:   "describe",
-	Short: `Call kubernetes' API via Wayne, and the interface will return the full kubernetes object.`,
-	Long: `Call kubernetes' API via Wayne, and the interface will return the full kubernetes object.
+var (
+	option      describe.Option
+	DescribeCmd = &cobra.Command{
+		Use:   "describe",
+		Short: `Call kubernetes' API via Wayne, and the interface will return the full kubernetes object.`,
+		Long: `Call kubernetes' API via Wayne, and the interface will return the full kubernetes object.
 
 Valid kubernetes resource obejct types include:
 * pod
@@ -24,14 +24,15 @@ Valid kubernetes resource obejct types include:
 * configmap
 * ingress
 
-And you can set ns/app as a filter.`,
-	Example: `khadijah describe --deployment=demo --output=pretty`,
-	Run: func(cmd *cobra.Command, args []string) {
-		option.Option = resource.ParserResource(args)
-		proxy := describe.NewProxy(option)
-		proxy.Describe()
-	},
-}
+And you can set namespace/cluster as a filter.`,
+		Example: `khadijah describe --deployment=demo --output=pretty`,
+		Run: func(cmd *cobra.Command, args []string) {
+			option.Option = resource.ParserResource(args)
+			proxy := describe.NewProxy(option)
+			proxy.Describe()
+		},
+	} // Describe kubernetes object interface
+)
 
 func init() {
 	DescribeCmd.Flags().SortFlags = false

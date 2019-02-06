@@ -9,12 +9,12 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/utils/resource"
 )
 
-var option get.Option
-
-var GetCmd = &cobra.Command{
-	Use:   "get",
-	Short: `Display one wayne resource.`,
-	Long: `Display one wayne resource.
+var (
+	option get.Option
+	GetCmd = &cobra.Command{
+		Use:   "get",
+		Short: `Display one wayne resource.`,
+		Long: `Display one wayne resource.
 
 Valid resource types include:
 * deployment
@@ -26,14 +26,15 @@ Valid resource types include:
 * application
 * apikey
 
-And you can set ns/app as a filter.`,
-	Example: `khadijah get deployment --ns=default`,
-	Run: func(cmd *cobra.Command, args []string) {
-		option.Option = resource.ParserArgs(args)
-		proxy := get.NewProxy(option)
-		proxy.Get()
-	},
-}
+And you can set namespace/application as a filter.`,
+		Example: `khadijah get deployment --ns=default`,
+		Run: func(cmd *cobra.Command, args []string) {
+			option.Option = resource.ParserArgs(args)
+			proxy := get.NewProxy(option)
+			proxy.Get()
+		},
+	} // Get wayne object interface
+)
 
 func init() {
 	GetCmd.Flags().SortFlags = false

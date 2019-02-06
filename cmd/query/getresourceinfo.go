@@ -7,7 +7,7 @@ import (
 
 var getResourceInfoOption query.GetResourceInfoOption
 
-var GetResourceInfoCmd = &cobra.Command{
+var getResourceInfoCmd = &cobra.Command{
 	Use:     "getresourceinfo",
 	Short:   `Get Resource Info by OpenAPI`,
 	Example: "khadijah getresourceinfo -n=demo --type=deployment",
@@ -18,6 +18,6 @@ var GetResourceInfoCmd = &cobra.Command{
 }
 
 func init() {
-	GetResourceInfoCmd.Flags().StringVarP(&getResourceInfoOption.Type, "type", "t", "", "kubernetes resource type:deployment,daemonset,statefulset etc.")
-	GetResourceInfoCmd.Flags().StringVarP(&getResourceInfoOption.Name, "name", "n", "", "kubernetes resource name")
+	getResourceInfoCmd.Flags().StringVarP(&getResourceInfoOption.Type, "type", "t", "", "kubernetes resource type:deployment,daemonset,statefulset etc.")
+	getResourceInfoCmd.Flags().StringVarP(&getResourceInfoOption.Name, "name", "n", "", "kubernetes resource name")
 }

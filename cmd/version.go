@@ -9,14 +9,15 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/config"
 )
 
-var versionCmd = &cobra.Command{
-	Use:     "version",
-	Aliases: []string{"v"},
-	Short:   "get version",
-	Run:     versionE,
-}
+var (
+	versionCmd = &cobra.Command{
+		Use:     "version",
+		Aliases: []string{"v"},
+		Short:   "get version",
+		Run:     versionE,
+	}
 
-var versionData = `khadijah: A client tool for Kubernetes via Wayne.
+	versionData = `khadijah: A client tool for Kubernetes via Wayne.
                                                                    dddddddd
 kkkkkkkk          hhhhhhh                                          d::::::d  iiii   jjjj                  hhhhhhh
 k::::::k          h:::::h                                          d::::::d i::::i j::::j                 h:::::h
@@ -42,6 +43,7 @@ kkkkkkkk    kkkkkkkhhhhhhh     hhhhhhh  aaaaaaaaaa  aaaa  ddddddddd   dddddiiiii
                                                                            jjj::::::jjj    Goroutine :  %d
                                                                               jjjjjj
 `
+)
 
 func versionE(cmd *cobra.Command, args []string) {
 	fmt.Printf(versionData, config.GlobalOption.System.Version, runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.NumCPU(), runtime.NumGoroutine())

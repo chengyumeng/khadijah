@@ -14,9 +14,9 @@ var QueryCmd = &cobra.Command{
 }
 
 func init() {
-	QueryCmd.AddCommand(GetVIPInfoCmd)
-	QueryCmd.AddCommand(GetPodInfoCmd)
-	QueryCmd.AddCommand(GetPodInfoFromIPCmd)
-	QueryCmd.AddCommand(GetResourceInfoCmd)
-	QueryCmd.AddCommand(GetDeploymentStatusCmd)
+	QueryCmd.AddCommand(getVIPInfoCmd)
+	QueryCmd.AddCommand(getPodInfoCmd)
+	QueryCmd.AddCommand(getPodInfoFromIPCmd)
+	QueryCmd.AddCommand(getResourceInfoCmd)
+	QueryCmd.AddCommand(getDeploymentStatusCmd)
 }

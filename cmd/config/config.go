@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Config show and set command interface
 var ConfigCmd = &cobra.Command{
 	Use:     "config",
 	Short:   "For khadijah config tool.",
@@ -14,7 +15,7 @@ var ConfigCmd = &cobra.Command{
 }
 
 func init() {
-	ConfigCmd.AddCommand(ShowCmd)
-	ConfigCmd.AddCommand(SetCmd)
+	ConfigCmd.AddCommand(showCmd)
+	ConfigCmd.AddCommand(setCmd)
 
 }

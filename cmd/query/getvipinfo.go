@@ -7,7 +7,7 @@ import (
 
 var getVIPInfoOption query.GetVIPInfoOption
 
-var GetVIPInfoCmd = &cobra.Command{
+var getVIPInfoCmd = &cobra.Command{
 	Use:     "getvipinfo",
 	Short:   "Get VIP Info by OpenAPI(Only for Qihoo360)",
 	Example: "khadijah getvipinfo -p=21273",
@@ -18,5 +18,5 @@ var GetVIPInfoCmd = &cobra.Command{
 }
 
 func init() {
-	GetVIPInfoCmd.Flags().IntVarP(&getVIPInfoOption.Port, "port", "p", 8080, "")
+	getVIPInfoCmd.Flags().IntVarP(&getVIPInfoOption.Port, "port", "p", 8080, "")
 }
