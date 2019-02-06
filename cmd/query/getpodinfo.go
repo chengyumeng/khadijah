@@ -7,7 +7,7 @@ import (
 
 var option query.GetPodInfoOption
 
-var GetPodInfoCmd = &cobra.Command{
+var getPodInfoCmd = &cobra.Command{
 	Use:     "getpodinfo",
 	Short:   "Get Pod Info by OpenAPI",
 	Example: "khadijah getpodinfo -c=SHBT --label=app=openapi-demo",
@@ -18,6 +18,6 @@ var GetPodInfoCmd = &cobra.Command{
 }
 
 func init() {
-	GetPodInfoCmd.Flags().StringVarP(&option.Cluster, "cluster", "c", "", "")
-	GetPodInfoCmd.Flags().StringVarP(&option.LabelSelector, "label", "l", "", "")
+	getPodInfoCmd.Flags().StringVarP(&option.Cluster, "cluster", "c", "", "")
+	getPodInfoCmd.Flags().StringVarP(&option.LabelSelector, "label", "l", "", "")
 }

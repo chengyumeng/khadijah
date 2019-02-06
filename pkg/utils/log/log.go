@@ -1,14 +1,15 @@
 package log
 
 import (
+	"os"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/fatih/color"
-	"os"
 )
 
 var (
-	CmdLogger = log.New()
-	AppLogger = log.New()
+	CmdLogger = log.New() // command line exec time log
+	AppLogger = log.New() // application exec time log
 )
 
 func init() {
@@ -17,7 +18,7 @@ func init() {
 	AppLogger.Out = os.Stderr
 }
 
-type CmdFormatter struct{}
+type CmdFormatter struct{} // Command log formatter interface.
 
 func (f *CmdFormatter) Format(entry *log.Entry) ([]byte, error) {
 	var colorFunc func(string, ...interface{}) string
@@ -40,9 +41,13 @@ func (f *CmdFormatter) Format(entry *log.Entry) ([]byte, error) {
 	}
 	return []byte(entry.Message + "\n"), nil
 }
+
+// Init a new command logger
 func NewCmdLogger(module string) *log.Entry {
 	return CmdLogger.WithField("module", module)
 }
+
+// Init a new application logger
 func NewAppLogger(module string) *log.Entry {
 	return AppLogger.WithField("module", module)
 }

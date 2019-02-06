@@ -3,12 +3,13 @@ package config
 import (
 	"fmt"
 
-	"github.com/chengyumeng/khadijah/pkg/config"
 	"github.com/gin-gonic/gin/json"
 	"github.com/spf13/cobra"
+
+	"github.com/chengyumeng/khadijah/pkg/config"
 )
 
-var ShowCmd = &cobra.Command{
+var showCmd = &cobra.Command{
 	Use:     "show",
 	Short:   "Used to show all user configurations.",
 	Example: `khadijah config show`,

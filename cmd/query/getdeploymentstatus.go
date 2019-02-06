@@ -7,7 +7,7 @@ import (
 
 var getDeploymentStatusOption query.GetDeploymentStatusOption
 
-var GetDeploymentStatusCmd = &cobra.Command{
+var getDeploymentStatusCmd = &cobra.Command{
 	Use:     "getdeploymentstatus",
 	Short:   "Get Deployment Status by OpenAPI",
 	Example: "khadijah getpodinfo -c=SHBT --label=app=openapi-demo",
@@ -18,7 +18,7 @@ var GetDeploymentStatusCmd = &cobra.Command{
 }
 
 func init() {
-	GetDeploymentStatusCmd.Flags().StringVarP(&getDeploymentStatusOption.Deployment, "deployment", "d", "", "")
-	GetDeploymentStatusCmd.Flags().StringVarP(&getDeploymentStatusOption.Namespace, "namespace", "n", "", "")
-	GetDeploymentStatusCmd.Flags().StringVarP(&getDeploymentStatusOption.Cluster, "cluster", "c", "", "")
+	getDeploymentStatusCmd.Flags().StringVarP(&getDeploymentStatusOption.Deployment, "deployment", "d", "", "")
+	getDeploymentStatusCmd.Flags().StringVarP(&getDeploymentStatusOption.Namespace, "namespace", "n", "", "")
+	getDeploymentStatusCmd.Flags().StringVarP(&getDeploymentStatusOption.Cluster, "cluster", "c", "", "")
 }

@@ -16,18 +16,18 @@ import (
 )
 
 const (
-	YAML   = "yaml"
-	JSON   = "json"
-	PRETTY = "pretty"
-	ROW    = "row"
+	YAML   = "yaml"   // Print data with yaml type.
+	JSON   = "json"   // Print data with json type.
+	PRETTY = "pretty" // Print data with table type.
+	ROW    = "row"    // Print data with row table type.
 )
 
 var (
-	DeploymentHeader = []string{"Name", "Namespace", "Cluster", "Labels", "Containers", "Replicas", "Message", "Pods"}
-	ServiceHeader    = []string{"Name", "Namespace", "Cluster", "Labels", "Type", "ClusterIP", "EXTERNAL-IP", "Ports", "SELECTOR"}
-	IngressHeader    = []string{"Name", "Namespace", "Cluster", "Labels", "HOSTS"}
-	ConfigmapHeader  = []string{"Name", "Namespace", "Cluster", "Labels"}
-	PodHeader        = []string{"Name", "Namespace", "Cluster", "PodIP", "Node", "Restart Time", "Start Time"}
+	deploymentHeader = []string{"Name", "Namespace", "Cluster", "Labels", "Containers", "Replicas", "Message", "Pods"}
+	serviceHeader    = []string{"Name", "Namespace", "Cluster", "Labels", "Type", "ClusterIP", "EXTERNAL-IP", "Ports", "SELECTOR"}
+	ingressHeader    = []string{"Name", "Namespace", "Cluster", "Labels", "HOSTS"}
+	configmapHeader  = []string{"Name", "Namespace", "Cluster", "Labels"}
+	podHeader        = []string{"Name", "Namespace", "Cluster", "PodIP", "Node", "Restart Time", "Start Time"}
 
 	logger = utillog.NewAppLogger("pkg/describe")
 )
@@ -37,6 +37,7 @@ type DescribeProxy struct {
 	table  table.Table
 }
 
+// Create a wayne describe proxy interface.
 func NewProxy(opt Option) DescribeProxy {
 	prx := DescribeProxy{
 		Option: opt,
@@ -52,6 +53,7 @@ func NewProxy(opt Option) DescribeProxy {
 	return prx
 }
 
+// Describe Kubernetes Object information.
 func (g *DescribeProxy) Describe() {
 	if g.Option.Option.Deployment != "" {
 		g.Option.resource = model.DeploymentType
@@ -125,27 +127,27 @@ func (g *DescribeProxy) showResourceState(name string) {
 						for _, p := range pods.Data {
 							arr = append(arr, p.Name)
 						}
-						g.table.SetHeaders(DeploymentHeader)
+						g.table.SetHeaders(deploymentHeader)
 						if line := g.createDeploymentLine(data, cluster); len(line) > 0 {
 							g.table.AddRow(append(line, strings.Join(arr, ",")))
 						}
 					case model.ServiceType:
-						g.table.SetHeaders(ServiceHeader)
+						g.table.SetHeaders(serviceHeader)
 						if line := g.createServiceLine(data, cluster); len(line) > 0 {
 							g.table.AddRow(line)
 						}
 					case model.IngressType:
-						g.table.SetHeaders(IngressHeader)
+						g.table.SetHeaders(ingressHeader)
 						if line := g.createIngressLine(data, cluster); len(line) > 0 {
 							g.table.AddRow(line)
 						}
 					case model.ConfigmapType:
-						g.table.SetHeaders(ConfigmapHeader)
+						g.table.SetHeaders(configmapHeader)
 						if line := g.createConfigmapLine(data, cluster); len(line) > 0 {
 							g.table.AddRow(line)
 						}
 					case model.PodType:
-						g.table.SetHeaders(PodHeader)
+						g.table.SetHeaders(podHeader)
 						pods := kubernetes.GetPod(int64(0), kns.Namespace, cluster, g.Option.Option.Pod)
 						if line := g.createPodLine(pods.Data, cluster); len(line) > 0 {
 							g.table.AddRow(line)

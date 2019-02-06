@@ -12,6 +12,7 @@ var (
 	logger = utillog.NewAppLogger("pkg/describe")
 )
 
+// Save config to user local home path
 func Save() (err error) {
 	f, err := os.Create(path.Join(UserConfigDir, ConfigFile))
 	if err != nil {

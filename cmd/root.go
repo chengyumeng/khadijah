@@ -5,7 +5,7 @@ import (
 	"github.com/chengyumeng/khadijah/cmd/describe"
 	"github.com/chengyumeng/khadijah/cmd/exec"
 	"github.com/chengyumeng/khadijah/cmd/get"
-	"github.com/chengyumeng/khadijah/cmd/login"
+	"github.com/chengyumeng/khadijah/cmd/loginout"
 	"github.com/chengyumeng/khadijah/cmd/query"
 	"github.com/spf13/cobra"
 )
@@ -30,8 +30,8 @@ func init() {
 	cobra.EnableCommandSorting = false
 	RootCmd.AddCommand(versionCmd)
 	RootCmd.AddCommand(config.ConfigCmd)
-	RootCmd.AddCommand(login.LoginCmd)
-	RootCmd.AddCommand(login.LogoutCmd)
+	RootCmd.AddCommand(loginout.LoginCmd)
+	RootCmd.AddCommand(loginout.LogoutCmd)
 	RootCmd.AddCommand(get.GetCmd)
 	RootCmd.AddCommand(describe.DescribeCmd)
 	RootCmd.AddCommand(query.QueryCmd)
