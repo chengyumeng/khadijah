@@ -180,7 +180,7 @@ func (g *Proxy) createPodLine(pod *kubernetes.Pod, cluster string) []string {
 		status = append(status, fmt.Sprintf("%s:%d", s.Name, s.RestartCount))
 	}
 	return []string{
-		pod.Name, pod.Namespace, cluster, pod.PodIp, pod.NodeName, strings.Join(status, ","), pod.StartTime.String(),
+		pod.Name, pod.Namespace, cluster, pod.PodIP, pod.NodeName, strings.Join(status, ","), pod.StartTime.String(),
 	}
 }
 
