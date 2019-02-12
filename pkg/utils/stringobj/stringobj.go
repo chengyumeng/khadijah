@@ -11,6 +11,7 @@ var (
 	logger = log.NewAppLogger("pkg/utils/stringobj")
 )
 
+// Map2list is for exchanging map to list
 func Map2list(m map[string]string) string {
 	s := ""
 	for k, v := range m {
@@ -19,6 +20,7 @@ func Map2list(m map[string]string) string {
 	return s
 }
 
+// String2Json is for exchanging string to json
 func String2Json(data []byte) []byte {
 	var v interface{}
 	err := json.Unmarshal(data, &v)
