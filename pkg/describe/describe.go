@@ -39,7 +39,7 @@ type Proxy struct {
 	table  table.Table
 }
 
-// NewProxy is the interface to create a wayne describe proxy interface.
+// NewProxy is the interface to create a wayne describe proxy.
 func NewProxy(opt Option) Proxy {
 	prx := Proxy{
 		Option: opt,

@@ -13,16 +13,21 @@ var (
 	logger = utillog.NewAppLogger("pkg/get")
 )
 
-const ROW = "row"
-const PRETTY = "pretty"
+// Print data with table/row table type.
+const (
+	ROW    = "row"
+	PRETTY = "pretty"
+)
 
-type GetProxy struct {
+// Proxy is one wayne get proxy interface
+type Proxy struct {
 	Option Option
 	table  table.Table
 }
 
-func NewProxy(opt Option) GetProxy {
-	prx := GetProxy{
+// NewProxy is the interface to create a wayne get proxy.
+func NewProxy(opt Option) Proxy {
+	prx := Proxy{
 		Option: opt,
 	}
 	switch prx.Option.Output {
@@ -36,34 +41,35 @@ func NewProxy(opt Option) GetProxy {
 	return prx
 }
 
-func (g *GetProxy) Get() {
+// Get wayne Object information.
+func (g *Proxy) Get() {
 	if g.Option.Option.Pod {
-		g.GetPod(model.DeploymentType)
-		g.GetPod(model.StatefulsetType)
-		g.GetPod(model.DaemonsetType)
-		g.GetPod(model.CronjobType)
+		g.getPod(model.DeploymentType)
+		g.getPod(model.StatefulsetType)
+		g.getPod(model.DaemonsetType)
+		g.getPod(model.CronjobType)
 	} else if g.Option.Option.Deployment {
-		g.GetPod(model.DeploymentType)
+		g.getPod(model.DeploymentType)
 	} else if g.Option.Option.DaemonSet {
-		g.GetPod(model.DaemonsetType)
+		g.getPod(model.DaemonsetType)
 	} else if g.Option.Option.Statefulset {
-		g.GetPod(model.StatefulsetType)
+		g.getPod(model.StatefulsetType)
 	} else if g.Option.Option.Cronjob {
-		g.GetPod(model.CronjobType)
+		g.getPod(model.CronjobType)
 	} else if g.Option.Option.Service {
-		g.GetService()
+		g.getService()
 	} else if g.Option.Option.Ingress {
-		g.GetIngress()
+		g.getIngress()
 	} else if g.Option.Option.App {
 		g.getApp()
 	} else if g.Option.Option.Namespace {
 		g.getNamespace()
 	} else if g.Option.Option.APIkey {
-		g.GetAPIKey()
+		g.getAPIKey()
 	}
 }
 
-func (g *GetProxy) print() {
+func (g *Proxy) print() {
 	if g.table.IsEmpty() {
 		logger.Warningln("There is no data in the table!")
 	} else {
@@ -71,7 +77,7 @@ func (g *GetProxy) print() {
 	}
 }
 
-func (g *GetProxy) getNamespace() {
+func (g *Proxy) getNamespace() {
 	if data := model.GetNamespaceBody(); data != nil {
 		fmt.Printf("Name: %s Email:%s\n\n", data.Data.Name, data.Data.Email)
 		g.table.SetHeaders([]string{"Id", "Name", "User", "CreateTime", "UpdateTime"})
@@ -85,7 +91,7 @@ func (g *GetProxy) getNamespace() {
 	g.print()
 }
 
-func (g *GetProxy) getApp() {
+func (g *Proxy) getApp() {
 	list := g.checkNS()
 
 	g.table.SetHeaders([]string{"Id", "Name", "Namespace", "User", "CreateTime"})
@@ -102,7 +108,7 @@ func (g *GetProxy) getApp() {
 	g.print()
 }
 
-func (g *GetProxy) GetPod(podType string) {
+func (g *Proxy) getPod(podType string) {
 	list := g.checkNS()
 	g.table.SetHeaders([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	for _, ns := range list {
@@ -122,7 +128,7 @@ func (g *GetProxy) GetPod(podType string) {
 	g.print()
 }
 
-func (g *GetProxy) GetService() {
+func (g *Proxy) getService() {
 	list := g.checkNS()
 	g.table.SetHeaders([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	for _, ns := range list {
@@ -142,7 +148,7 @@ func (g *GetProxy) GetService() {
 	g.print()
 }
 
-func (g *GetProxy) GetIngress() {
+func (g *Proxy) getIngress() {
 	list := g.checkNS()
 	g.table.SetHeaders([]string{"Id", "Name", "Type", "APP", "Namespace", "User", "CreateTime"})
 	for _, ns := range list {
@@ -163,7 +169,7 @@ func (g *GetProxy) GetIngress() {
 
 }
 
-func (g *GetProxy) GetAPIKey() {
+func (g *Proxy) getAPIKey() {
 	if data := model.GetAPIKeyBody(0); data != nil {
 		g.table.SetHeaders([]string{"ID", "Name", "Type", "Resource ID", "User", "Description", "Token"})
 		for _, api := range data.Data.APIkeys {
@@ -174,7 +180,7 @@ func (g *GetProxy) GetAPIKey() {
 	g.print()
 }
 
-func (g *GetProxy) checkNS() (list []model.Namespace) {
+func (g *Proxy) checkNS() (list []model.Namespace) {
 	ns := model.GetNamespaceBody()
 	if ns == nil {
 		return
