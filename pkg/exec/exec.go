@@ -18,26 +18,27 @@ var (
 	logger = utillog.NewAppLogger("pkg/exec")
 )
 
+// shell command type
 const (
-	STDIN   string = "stdin"
-	CONNECT string = "connect"
+	STDIN   = "stdin"
+	CONNECT = "connect"
 )
 
-/*
- * SocketShell 并不是 ssh 的全称，ssh的全称是 Sentry Socket
- * 这里这样定义的目的只是描述 shell 的实现形式
- */
+// SocketShell 并不是 ssh 的全称，ssh的全称是 Sentry Socket
+// 这里这样定义的目的只是描述 shell 的实现形式
 type SocketShell struct {
 	Connection *websocket.Conn
 	Command    string
 	Exit       bool
 }
 
+// Message is the socket message of ssh
 type Message struct {
 	Method string      `json:"method"`
 	Data   interface{} `json:"data"`
 }
 
+// NewSocketShell is the function to init a new socket shell
 func NewSocketShell() *SocketShell {
 	ssh := new(SocketShell)
 	u := fmt.Sprintf("%s/api/v1/clientool/exec", config.GlobalOption.System.WebsocketURL)
@@ -52,6 +53,7 @@ func NewSocketShell() *SocketShell {
 	return ssh
 }
 
+// Connect is the function to connect to remote k8s pod
 func (s *SocketShell) Connect(option Option) error {
 	sendData := Message{CONNECT, option}
 	data, err := json.Marshal(sendData)
@@ -61,6 +63,7 @@ func (s *SocketShell) Connect(option Option) error {
 	return s.Connection.WriteMessage(websocket.TextMessage, data)
 }
 
+// Listen is the function to listen to remote k8s pod
 func (s *SocketShell) Listen() {
 	writer := bufio.NewWriter(os.Stdout)
 	for s.Exit == false {
@@ -78,6 +81,7 @@ func (s *SocketShell) Listen() {
 	}
 }
 
+// StdinSend is the function to send message from stdin to remote k8s pod
 func (s *SocketShell) StdinSend() {
 	t, _ := term.Open("/dev/tty")
 	defer func() {

@@ -7,6 +7,7 @@ import (
 	"github.com/fatih/color"
 )
 
+// default logger
 var (
 	CmdLogger = log.New() // command line exec time log
 	AppLogger = log.New() // application exec time log
@@ -18,8 +19,10 @@ func init() {
 	AppLogger.Out = os.Stderr
 }
 
-type CmdFormatter struct{} // Command log formatter interface.
+// CmdFormatter is Command log formatter interface.
+type CmdFormatter struct{}
 
+// Format is to format log for print
 func (f *CmdFormatter) Format(entry *log.Entry) ([]byte, error) {
 	var colorFunc func(string, ...interface{}) string
 	switch entry.Level {
@@ -42,12 +45,12 @@ func (f *CmdFormatter) Format(entry *log.Entry) ([]byte, error) {
 	return []byte(entry.Message + "\n"), nil
 }
 
-// Init a new command logger
+// NewCmdLogger is the interface to init a new command logger
 func NewCmdLogger(module string) *log.Entry {
 	return CmdLogger.WithField("module", module)
 }
 
-// Init a new application logger
+// NewAppLogger is the interface to init a new application logger
 func NewAppLogger(module string) *log.Entry {
 	return AppLogger.WithField("module", module)
 }

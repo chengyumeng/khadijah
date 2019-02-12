@@ -6,14 +6,14 @@ import (
 	"path"
 )
 
-// khadijah global config option
-var GlobalOption *Option = new(Option)
-
-// user config directory, default be ""
-var UserConfigDir string
-
-// user config file name
-var ConfigFile string = "config"
+var (
+	// GlobalOption is khadijah global config option
+	GlobalOption = new(Option)
+	// UserConfigDir is user config directory, default be ""
+	UserConfigDir string
+	// ConfigFile is user config file name
+	ConfigFile = "config"
+)
 
 func init() {
 	user, err := user.Current()

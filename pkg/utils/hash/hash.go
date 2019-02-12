@@ -9,6 +9,7 @@ type hashmap struct {
 	mapping sync.Map
 }
 
+// Hashmap : Global hash map
 var Hashmap hashmap
 
 func (h *hashmap) setIfNotExist(arr []string) bool {
@@ -16,6 +17,7 @@ func (h *hashmap) setIfNotExist(arr []string) bool {
 	return !ok
 }
 
+// SetIfNotExist is for setting key to hashmap,if exist,return false
 func SetIfNotExist(arr []string) bool {
 	_, ok := Hashmap.mapping.LoadOrStore(strings.Join(arr, ""), true)
 	return !ok

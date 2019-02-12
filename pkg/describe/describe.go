@@ -15,12 +15,12 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/utils/table"
 )
 
+// Print data with yaml/json/table/row table type.
 const (
-	// Print data type
-	YAML   = "yaml"   // Print data with yaml type.
-	JSON   = "json"   // Print data with json type.
-	PRETTY = "pretty" // Print data with table type.
-	ROW    = "row"    // Print data with row table type.
+	YAML   = "yaml"
+	JSON   = "json"
+	PRETTY = "pretty"
+	ROW    = "row"
 )
 
 var (
@@ -33,15 +33,15 @@ var (
 	logger = log.NewAppLogger("pkg/describe")
 )
 
-// wayne describe proxy interface
-type DescribeProxy struct {
+// Proxy is one wayne describe proxy interface
+type Proxy struct {
 	Option Option
 	table  table.Table
 }
 
-// Create a wayne describe proxy interface.
-func NewProxy(opt Option) DescribeProxy {
-	prx := DescribeProxy{
+// NewProxy is the interface to create a wayne describe proxy.
+func NewProxy(opt Option) Proxy {
+	prx := Proxy{
 		Option: opt,
 	}
 	switch prx.Option.Output {
@@ -56,7 +56,7 @@ func NewProxy(opt Option) DescribeProxy {
 }
 
 // Describe Kubernetes Object information.
-func (g *DescribeProxy) Describe() {
+func (g *Proxy) Describe() {
 	if g.Option.Option.Deployment != "" {
 		g.Option.resource = model.DeploymentType
 		g.showResourceState(g.Option.Option.Deployment)
@@ -84,7 +84,7 @@ func (g *DescribeProxy) Describe() {
 	}
 }
 
-func (g *DescribeProxy) showResourceState(name string) {
+func (g *Proxy) showResourceState(name string) {
 	nslist := g.checkNS()
 	for _, ns := range nslist {
 		kns := new(model.Metadata)
@@ -166,7 +166,7 @@ func (g *DescribeProxy) showResourceState(name string) {
 	}
 }
 
-func (g *DescribeProxy) print() {
+func (g *Proxy) print() {
 	if g.table.IsEmpty() {
 		logger.Warningln("There is no data in the table!")
 	} else {
@@ -174,17 +174,17 @@ func (g *DescribeProxy) print() {
 	}
 }
 
-func (g *DescribeProxy) createPodLine(pod *kubernetes.Pod, cluster string) []string {
+func (g *Proxy) createPodLine(pod *kubernetes.Pod, cluster string) []string {
 	status := []string{}
 	for _, s := range pod.ContainerStatus {
 		status = append(status, fmt.Sprintf("%s:%d", s.Name, s.RestartCount))
 	}
 	return []string{
-		pod.Name, pod.Namespace, cluster, pod.PodIp, pod.NodeName, strings.Join(status, ","), pod.StartTime.String(),
+		pod.Name, pod.Namespace, cluster, pod.PodIP, pod.NodeName, strings.Join(status, ","), pod.StartTime.String(),
 	}
 }
 
-func (g *DescribeProxy) createDeploymentLine(data []byte, cluster string) []string {
+func (g *Proxy) createDeploymentLine(data []byte, cluster string) []string {
 	obj := new(kubernetes.DeploymentBody)
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
@@ -203,7 +203,7 @@ func (g *DescribeProxy) createDeploymentLine(data []byte, cluster string) []stri
 	return []string{obj.Data.Name, obj.Data.Namespace, cluster, stringobj.Map2list(obj.Data.Labels), stringobj.Map2list(ic), rc, stringobj.Map2list(msg)}
 }
 
-func (g *DescribeProxy) createServiceLine(data []byte, cluster string) []string {
+func (g *Proxy) createServiceLine(data []byte, cluster string) []string {
 	obj := new(kubernetes.ServiceBody)
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
@@ -222,7 +222,7 @@ func (g *DescribeProxy) createServiceLine(data []byte, cluster string) []string 
 		strings.Join(ps, ","), stringobj.Map2list(obj.Data.Spec.Selector)}
 }
 
-func (g *DescribeProxy) createIngressLine(data []byte, cluster string) []string {
+func (g *Proxy) createIngressLine(data []byte, cluster string) []string {
 	obj := new(kubernetes.IngressBody)
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
@@ -238,7 +238,7 @@ func (g *DescribeProxy) createIngressLine(data []byte, cluster string) []string 
 		stringobj.Map2list(obj.Data.Labels), strings.Join(hosts, ",")}
 }
 
-func (g *DescribeProxy) createConfigmapLine(data []byte, cluster string) []string {
+func (g *Proxy) createConfigmapLine(data []byte, cluster string) []string {
 	obj := new(kubernetes.ConfigmapBody)
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
@@ -250,7 +250,7 @@ func (g *DescribeProxy) createConfigmapLine(data []byte, cluster string) []strin
 		stringobj.Map2list(obj.Data.ObjectMeta.Labels)}
 }
 
-func (g *DescribeProxy) checkNS() (list []model.Namespace) {
+func (g *Proxy) checkNS() (list []model.Namespace) {
 	ns := model.GetNamespaceBody()
 	if ns == nil {
 		return

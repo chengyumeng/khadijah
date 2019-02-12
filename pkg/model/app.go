@@ -14,8 +14,9 @@ var (
 	logger = utillog.NewAppLogger("pkg/model")
 )
 
-func GetAppBody(nsId int64) *AppBody {
-	url := fmt.Sprintf("%s/%s/%d/%s?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/namespaces", nsId, "apps", PageSize)
+// GetAppBody is the interface to get app body from wayne API
+func GetAppBody(nsID int64) *AppBody {
+	url := fmt.Sprintf("%s/%s/%d/%s?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/namespaces", nsID, "apps", PageSize)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, err := http.DefaultClient.Do(req)

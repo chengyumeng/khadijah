@@ -11,5 +11,6 @@ script:
   - go get -u golang.org/x/lint/golint
   - golint -set_exit_status=1 ./main.go
   - golint -set_exit_status=1 ./cmd/...
+  - golint -set_exit_status=1 ./pkg/...
   - go get github.com/chengyumeng/docfmt
   - docfmt -p=. --lint --debug

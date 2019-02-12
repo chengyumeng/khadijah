@@ -9,8 +9,9 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/config"
 )
 
-func GetServiceBody(appId int64) *ServiceBody {
-	url := fmt.Sprintf("%s/%s/%d/services?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/apps", appId, PageSize)
+// GetServiceBody is the interface to get service body from wayne API
+func GetServiceBody(appID int64) *ServiceBody {
+	url := fmt.Sprintf("%s/%s/%d/services?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/apps", appID, PageSize)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, err := http.DefaultClient.Do(req)

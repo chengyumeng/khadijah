@@ -1,5 +1,6 @@
 package resource
 
+// Option for get command
 type Option struct {
 	Namespace   bool
 	App         bool
@@ -14,6 +15,7 @@ type Option struct {
 	APIkey      bool
 }
 
+// DescribeOption for describe command
 type DescribeOption struct {
 	Deployment  string
 	Daemonset   string
@@ -24,6 +26,7 @@ type DescribeOption struct {
 	Pod         string
 }
 
+// ParserArgs is for comand line args
 func ParserArgs(args []string) *Option {
 	if len(args) == 1 {
 		switch args[0] {
@@ -56,6 +59,7 @@ func ParserArgs(args []string) *Option {
 	return nil
 }
 
+// ParserResource is for comand line args v2
 func ParserResource(args []string) *DescribeOption {
 	if len(args) == 2 {
 		switch args[0] {

@@ -1,5 +1,6 @@
 package model
 
+// AppBody is the wayne APP http API response body
 type AppBody struct {
 	Data struct {
 		Page
@@ -7,6 +8,7 @@ type AppBody struct {
 	} `json:"data"`
 }
 
+// NamespaceBody is the wayne Namespace http API response body
 type NamespaceBody struct {
 	Data struct {
 		User
@@ -14,6 +16,7 @@ type NamespaceBody struct {
 	} `json:"data"`
 }
 
+// PodBody is the wayne pod http API response body
 type PodBody struct {
 	Data struct {
 		Page
@@ -21,6 +24,7 @@ type PodBody struct {
 	} `json:"data"`
 }
 
+// ServiceBody is the wayne service http API response body
 type ServiceBody struct {
 	Data struct {
 		Page
@@ -28,6 +32,7 @@ type ServiceBody struct {
 	} `json:"data"`
 }
 
+// IngressBody is the wayne ingress http API response body
 type IngressBody struct {
 	Data struct {
 		Page
@@ -35,6 +40,7 @@ type IngressBody struct {
 	} `json:"data"`
 }
 
+// APIKeyBody is the wayne APIKey http API response body
 type APIKeyBody struct {
 	Data struct {
 		Page

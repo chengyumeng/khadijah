@@ -9,8 +9,9 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/config"
 )
 
-func GetPodBody(appId int64, podType string) *PodBody {
-	url := fmt.Sprintf("%s/%s/%d/%ss?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/apps", appId, podType, PageSize)
+// GetPodBody is the interface to get pod body from wayne API
+func GetPodBody(appID int64, podType string) *PodBody {
+	url := fmt.Sprintf("%s/%s/%d/%ss?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/apps", appID, podType, PageSize)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, err := http.DefaultClient.Do(req)

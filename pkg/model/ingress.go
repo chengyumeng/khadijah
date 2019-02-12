@@ -9,8 +9,9 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/config"
 )
 
-func GetIngressBody(appId int64) *IngressBody {
-	url := fmt.Sprintf("%s/%s/%d/ingresses?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/apps", appId, PageSize)
+// GetIngressBody is the interface to get ingress body from wayne API
+func GetIngressBody(appID int64) *IngressBody {
+	url := fmt.Sprintf("%s/%s/%d/ingresses?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/apps", appID, PageSize)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, err := http.DefaultClient.Do(req)

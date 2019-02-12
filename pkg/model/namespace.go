@@ -9,7 +9,7 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/config"
 )
 
-// Get wayne namespace information
+// GetNamespaceBody is the interface to get wayne namespace information
 func GetNamespaceBody() *NamespaceBody {
 	url := fmt.Sprintf("%s/%s", config.GlobalOption.System.BaseURL, "currentuser")
 	req, _ := http.NewRequest(http.MethodGet, url, nil)

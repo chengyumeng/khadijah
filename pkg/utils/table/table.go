@@ -8,8 +8,10 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
+// Type : table type
 type Type int
 
+// table type
 const (
 	Horizontal Type = 0
 	Vertical   Type = 1
@@ -21,6 +23,7 @@ type table struct {
 	Rows    [][]string
 }
 
+// Table interface
 type Table interface {
 	SetHeaders(h []string)
 	AddRow(r []string) error
@@ -28,24 +31,28 @@ type Table interface {
 	Println()
 }
 
+// NewTable is init a new default table
 func NewTable(t Type) Table {
 	return &table{
 		Type: t,
 	}
 }
 
+// SetHeaders is set headers to table
 func (t *table) SetHeaders(h []string) {
 	t.Headers = h
 }
 
+// AddRow is add row to table
 func (t *table) AddRow(r []string) error {
 	if len(r) == len(t.Headers) {
 		t.Rows = append(t.Rows, r)
 		return nil
 	}
-	return fmt.Errorf("Number of grid cells and the head inconsistencies.")
+	return fmt.Errorf("NUMBER OF GRID CELLS AND THE  HEAD INCONSISTENCIES")
 }
 
+// Println is print table to stdout
 func (t *table) Println() {
 	switch t.Type {
 	case Horizontal:
@@ -70,6 +77,7 @@ func (t *table) Println() {
 	}
 }
 
+// IsEmpty is check is check if table rows is more than zero.
 func (t *table) IsEmpty() bool {
 	if len(t.Rows) > 0 {
 		return false

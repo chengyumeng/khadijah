@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// Web 表单单页显示，不分页
+// PageSize : Web 表单单页显示，不分页
 const PageSize int = 1024 * 1024
 
 // wayne 数据类型对照
@@ -21,18 +21,18 @@ const (
 	ConfigmapType   string = "configmap"
 )
 
-// 用户个人信息
+// User : 用户个人信息
 type User struct {
-	Id      int64  `json:"id"`
+	ID      int64  `json:"id"`
 	Name    string `json:"name"`
 	Email   string `json:"email"`
 	Display string `json:"display"`
 	Admin   bool   `json:"admin"`
 }
 
-// 命名空间基本数据结构
+// Namespace : 命名空间基本数据结构
 type Namespace struct {
-	Id         int64      `json:"id"`
+	ID         int64      `json:"id"`
 	Name       string     `json:"name"`
 	Metadata   string     `json:"metadata"`
 	CreateTime *time.Time `json:"createTime"`
@@ -40,7 +40,7 @@ type Namespace struct {
 	User       string     `json:"user"`
 }
 
-// 页码基本数据结构
+// Page : 页码基本数据结构
 type Page struct {
 	PageNum    int64 `json:"pageNo"`
 	PageSize   int64 `json:"pageSize"`
@@ -48,9 +48,9 @@ type Page struct {
 	TotalCount int64 `json:"totalCount"`
 }
 
-// 应用基本数据结构
+// App : 应用基本数据结构
 type App struct {
-	Id         int64      `json:"id"`
+	ID         int64      `json:"id"`
 	Name       string     `json:"name"`
 	Namespace  string     `json:"namespaceName"`
 	User       string     `json:"user"`
@@ -60,7 +60,7 @@ type App struct {
 
 // Pod 基本数据结构
 type Pod struct {
-	Id         int64      `json:"id"`
+	ID         int64      `json:"id"`
 	Name       string     `json:"name"`
 	Metadata   string     `json:"metadata"`
 	CreateTime *time.Time `json:"createTime"`
@@ -69,9 +69,9 @@ type Pod struct {
 	App        App        `json:"app"`
 }
 
-// 负载均衡基本数据结构
+// Service : 负载均衡基本数据结构
 type Service struct {
-	Id         int64      `json:"id"`
+	ID         int64      `json:"id"`
 	Name       string     `json:"name"`
 	Metadata   string     `json:"metadata"`
 	CreateTime *time.Time `json:"createTime"`
@@ -82,7 +82,7 @@ type Service struct {
 
 // Ingress 基本数据结构
 type Ingress struct {
-	Id         int64      `json:"id"`
+	ID         int64      `json:"id"`
 	Name       string     `json:"name"`
 	Metadata   string     `json:"metadata"`
 	CreateTime *time.Time `json:"createTime"`
@@ -93,12 +93,12 @@ type Ingress struct {
 
 // APIKey 基本数据结构
 type APIKey struct {
-	Id    int64  `json:"id,omitempty"`
+	ID    int64  `json:"id,omitempty"`
 	Name  string `json:"name,omitempty"`
 	Token string `json:"token,omitempty"`
 	// 0：全局 1：命名空间 2：项目
 	Type        int        `json:"type"`
-	ResourceId  int64      `json:"resourceId,omitempty"`
+	ResourceID  int64      `json:"resourceId,omitempty"`
 	Group       *Group     `json:"group,omitempty"`
 	Description string     `json:"description,omitempty"`
 	User        string     `json:"user,omitempty"`
@@ -108,9 +108,9 @@ type APIKey struct {
 	UpdateTime  *time.Time `json:"updateTime,omitempty"`
 }
 
-// 用户组基本数据结构
+// Group 用户组基本数据结构
 type Group struct {
-	Id         int64      `json:"id,omitempty"`
+	ID         int64      `json:"id,omitempty"`
 	Name       string     `json:"name,omitempty"`
 	Comment    string     `json:"comment,omitempty"`
 	Type       int        `json:"type"`
@@ -118,7 +118,7 @@ type Group struct {
 	UpdateTime *time.Time `json:"updateTime,omitempty"`
 }
 
-// 个性化数据
+// Metadata 个性化数据
 type Metadata struct {
 	Namespace   string                 `json:"namespace"`
 	Clusters    []string               `json:"clusters"`

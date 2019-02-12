@@ -6,6 +6,7 @@ import (
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// ConfigMap : via k8s object
 type ConfigMap struct {
 	// metav1.TypeMeta `json:",inline"`
 	ObjectMeta ObjectMeta        `json:"objectMeta"`
@@ -46,17 +47,19 @@ type ObjectMeta struct {
 	CreationTimestamp metaV1.Time `json:"creationTimestamp,omitempty"`
 }
 
+// Pod : via k8s object
 type Pod struct {
 	Name            string            `json:"name,omitempty"`
 	Namespace       string            `json:"namespace,omitempty"`
 	ContainerStatus []ContainerStatus `json:"containerStatus,omitempty"`
 	State           string            `json:"state,omitempty"`
-	PodIp           string            `json:"podIp,omitempty"`
+	PodIP           string            `json:"podIp,omitempty"`
 	NodeName        string            `json:"nodeName,omitempty"`
 	StartTime       time.Time         `json:"startTime,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty"`
 }
 
+// ContainerStatus : via k8s object
 type ContainerStatus struct {
 	Name         string `json:"name,omitempty"`
 	RestartCount int32  `json:"restartCount"`
