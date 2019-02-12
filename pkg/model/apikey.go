@@ -9,8 +9,9 @@ import (
 	"github.com/chengyumeng/khadijah/pkg/config"
 )
 
-func GetAPIKeyBody(appId int64) *APIKeyBody {
-	url := fmt.Sprintf("%s/%s/%d/apikeys?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/apps", appId, PageSize)
+// GetAPIKeyBody is the interface to get apikey body from wayne API
+func GetAPIKeyBody(appID int64) *APIKeyBody {
+	url := fmt.Sprintf("%s/%s/%d/apikeys?pageSize=%d", config.GlobalOption.System.BaseURL, "api/v1/apps", appID, PageSize)
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("Authorization", "Bearer "+config.GlobalOption.Token)
 	res, err := http.DefaultClient.Do(req)

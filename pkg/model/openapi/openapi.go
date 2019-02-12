@@ -14,6 +14,7 @@ var (
 	logger = utillog.NewAppLogger("pkg/model/openapi")
 )
 
+// Query wayne OpenAPI http API
 func Query(action string, params []string) []byte {
 	url := fmt.Sprintf("%s/openapi/v1/gateway/action/%s?apikey=%s&%s", config.GlobalOption.System.BaseURL, action, config.GlobalOption.APIKey, strings.Join(params, "&"))
 	req, err := http.NewRequest(http.MethodGet, url, nil)

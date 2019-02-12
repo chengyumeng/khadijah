@@ -14,8 +14,9 @@ var (
 	logger = utillog.NewAppLogger("pkg/model/kubernetes")
 )
 
-func GetResourceBody(resource string, appId int64, namespace string, cluster string, resourceType string, params string) []byte {
-	url := fmt.Sprintf("%s/api/v1/kubernetes/apps/%d/%ss/%s/namespaces/%s/clusters/%s%s", config.GlobalOption.System.BaseURL, appId, resourceType, resource, namespace, cluster, params)
+// GetResourceBody is the interface to get k8s resource from wayne http API
+func GetResourceBody(resource string, appID int64, namespace string, cluster string, resourceType string, params string) []byte {
+	url := fmt.Sprintf("%s/api/v1/kubernetes/apps/%d/%ss/%s/namespaces/%s/clusters/%s%s", config.GlobalOption.System.BaseURL, appID, resourceType, resource, namespace, cluster, params)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		logger.Errorln(err)
@@ -39,8 +40,9 @@ func GetResourceBody(resource string, appId int64, namespace string, cluster str
 	return body
 }
 
-func ListPods(appId int64, namespace string, cluster string, params string) (obj PodsBody) {
-	url := fmt.Sprintf("%s/api/v1/kubernetes/apps/%d/pods/namespaces/%s/clusters/%s%s", config.GlobalOption.System.BaseURL, appId, namespace, cluster, params)
+// ListPods is the interface to list k8s pods from wayne http API
+func ListPods(appID int64, namespace string, cluster string, params string) (obj PodsBody) {
+	url := fmt.Sprintf("%s/api/v1/kubernetes/apps/%d/pods/namespaces/%s/clusters/%s%s", config.GlobalOption.System.BaseURL, appID, namespace, cluster, params)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		logger.Errorln(err)
@@ -68,8 +70,9 @@ func ListPods(appId int64, namespace string, cluster string, params string) (obj
 	return obj
 }
 
-func GetPod(appId int64, namespace string, cluster string, pod string) (obj PodBody) {
-	url := fmt.Sprintf("%s/api/v1/kubernetes/apps/%d/pods/%s/namespaces/%s/clusters/%s", config.GlobalOption.System.BaseURL, appId, pod, namespace, cluster)
+// GetPod is the interface to get k8s pod from wayne http API
+func GetPod(appID int64, namespace string, cluster string, pod string) (obj PodBody) {
+	url := fmt.Sprintf("%s/api/v1/kubernetes/apps/%d/pods/%s/namespaces/%s/clusters/%s", config.GlobalOption.System.BaseURL, appID, pod, namespace, cluster)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		logger.Errorln(err)
