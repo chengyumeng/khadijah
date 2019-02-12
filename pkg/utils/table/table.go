@@ -76,6 +76,7 @@ func (t *table) Println() {
 		fmt.Println(table)
 	}
 }
+
 // IsEmpty is check is check if table rows is more than zero.
 func (t *table) IsEmpty() bool {
 	if len(t.Rows) > 0 {
