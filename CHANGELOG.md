@@ -1,4 +1,20 @@
 
+0.3.0 / 2019-02-12
+==================
+
+  * go fmt pkg/table
+  * Add golint to pkg/utils
+  * add golint to pkg/query
+  * Add golint to pkg/model
+  * Add golint to pkg/login
+  * Add golint to pkg/get
+  * Set golint to pkg/exec
+  * Set golint to pkg/describe
+  * Set golint to pkg/config
+  * Add golint to main.go
+  * Install golint command
+  * Add golint to cmd package
+
 0.2.2 / 2019-02-06
 ==================
 
