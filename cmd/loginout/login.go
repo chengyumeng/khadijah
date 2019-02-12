@@ -9,7 +9,7 @@ import (
 
 var (
 	option login.Option
-
+    // LoginCmd is the interface of User login command.
 	LoginCmd = &cobra.Command{
 		Use:     "login",
 		Short:   "Log in to the Wayne platform for more API access.",
@@ -20,8 +20,8 @@ var (
 				log.CmdLogger.Errorln(err)
 			}
 		},
-	} // User login command interface
-
+	}
+	// LogoutCmd is the interface of User logout command.
 	LogoutCmd = &cobra.Command{
 		Use:     "logout",
 		Short:   "Log out from the Wayne platform.",
@@ -29,7 +29,7 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			login.Clear()
 		},
-	} // User logout command interface
+	}
 )
 
 func init() {

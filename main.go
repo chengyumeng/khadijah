@@ -8,6 +8,7 @@ import (
 	utilslog "github.com/chengyumeng/khadijah/pkg/utils/log"
 )
 
+// khadijah version
 var (
 	Version = "0.2.2"
 )

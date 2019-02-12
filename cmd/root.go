@@ -10,7 +10,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var v bool = false
+// 是否输出 version 信息
+var v bool
+
+// RootCmd 是命令行的入口
 var RootCmd = &cobra.Command{
 	Use: "khadijah",
 	Long: `The Client Tool for Wayne

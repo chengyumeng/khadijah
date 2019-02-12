@@ -9,7 +9,8 @@ import (
 )
 
 var (
-	option      describe.Option
+	option describe.Option
+	// DescribeCmd is the interface of describe command
 	DescribeCmd = &cobra.Command{
 		Use:   "describe",
 		Short: `Call kubernetes' API via Wayne, and the interface will return the full kubernetes object.`,

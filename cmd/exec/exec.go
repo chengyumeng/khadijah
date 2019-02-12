@@ -10,32 +10,32 @@ import (
 
 var (
 	option = pkgexec.Option{}
+	// ExecCmd is the interface of exec terminal command
+	ExecCmd = &cobra.Command{
+		Use:     "exec",
+		Short:   "Execute a command in a container.",
+		Example: `khadijah exec -p=openapi-demo-9c5bd44b7-xvjpg -c=SHBT --container=php --cmd=whoami -n=default`,
+		Args:    cobra.NoArgs,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			ssh := pkgexec.NewSocketShell()
+			err := ssh.Connect(option)
+			if err != nil {
+				fmt.Printf("创建连接的时候出现异常： %s", err.Error())
+				return
+			}
+
+			if option.Terminal {
+				go ssh.Listen()
+				ssh.StdinSend()
+			} else {
+				ssh.Listen()
+			}
+		},
+	}
 )
-
-var ExecCmd = &cobra.Command{
-	Use:     "exec",
-	Short:   "Execute a command in a container.",
-	Example: `khadijah exec -p=openapi-demo-9c5bd44b7-xvjpg -c=SHBT --container=php --cmd=whoami -n=default`,
-	Args:    cobra.NoArgs,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		return nil
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		ssh := pkgexec.NewSocketShell()
-		err := ssh.Connect(option)
-		if err != nil {
-			fmt.Printf("创建连接的时候出现异常： %s", err.Error())
-			return
-		}
-
-		if option.Terminal {
-			go ssh.Listen()
-			ssh.StdinSend()
-		} else {
-			ssh.Listen()
-		}
-	},
-}
 
 func init() {
 	ExecCmd.Flags().StringVarP(&option.Cluster, "cluster", "c", "", "Wayne cluster name.")

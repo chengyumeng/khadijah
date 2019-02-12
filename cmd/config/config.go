@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Config show and set command interface
+// ConfigCmd is the interface of show and set command
 var ConfigCmd = &cobra.Command{
 	Use:     "config",
 	Short:   "For khadijah config tool.",
