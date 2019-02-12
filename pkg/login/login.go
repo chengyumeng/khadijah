@@ -14,7 +14,7 @@ var (
 	logger = utillog.NewAppLogger("pkg/login")
 )
 
-// User login on wayne
+// Login is the interface for user login on wayne
 func Login(opt Option) (err error) {
 	url := fmt.Sprintf("%s/login/db?username=%s&password=%s", config.GlobalOption.System.BaseURL, opt.Username, opt.Password)
 
@@ -40,22 +40,20 @@ func Login(opt Option) (err error) {
 	}
 	if err := config.SetToken(data.Data.Token); err != nil {
 		return err
-	} else {
-		logger.Infoln("Login Success!")
 	}
+	logger.Infoln("Login Success!")
 	if err := config.SetUser(&config.User{opt.Username}); err != nil {
 		return err
 	}
 	return nil
 }
 
-// User clear wayne login token
+// Clear is the interface for user clear wayne login token
 func Clear() error {
 	if err := config.SetToken(""); err != nil {
 		return err
-	} else {
-		logger.Infoln("Logout Success!")
 	}
+	logger.Infoln("Logout Success!")
 	if err := config.SetUser(&config.User{""}); err != nil {
 		return err
 	}
