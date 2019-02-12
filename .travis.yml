@@ -8,6 +8,7 @@ go:
 script:
   - go test -v ./...
   - go build -o khadijah
+  - go get -u golang.org/x/lint/golint
   - golint -set_exit_status=1 ./main.go
   - golint -set_exit_status=1 ./cmd/...
   - go get github.com/chengyumeng/docfmt
