@@ -70,7 +70,7 @@ khadijah describe deployment move-num1 -n=infra -o=pretty
 ```
 
 ```bash
-khadijah query getpodinfo -c=K8S-1 --label=app=move-num1
+khadijah query getpodinfo -c=K8S-1 --label=app
 ```
 ```json
 {
