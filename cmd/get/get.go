@@ -11,6 +11,7 @@ import (
 
 var (
 	option get.Option
+	// GetCmd is the interface of get wayne resource command
 	GetCmd = &cobra.Command{
 		Use:   "get",
 		Short: `Display one wayne resource.`,

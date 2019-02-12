@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// QueryCmd is the interface of query wayne openapi
 var QueryCmd = &cobra.Command{
 	Use:   "query",
 	Short: "Query by Wayne OpenAPI",
