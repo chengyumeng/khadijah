@@ -9,7 +9,7 @@ import (
 
 var (
 	option login.Option
-    // LoginCmd is the interface of User login command.
+	// LoginCmd is the interface of User login command.
 	LoginCmd = &cobra.Command{
 		Use:     "login",
 		Short:   "Log in to the Wayne platform for more API access.",
