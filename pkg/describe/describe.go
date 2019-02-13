@@ -87,24 +87,8 @@ func (g *Proxy) Describe() {
 func (g *Proxy) showResourceState(name string) {
 	nslist := g.checkNS()
 	for _, ns := range nslist {
-		kns := new(model.Metadata)
-		err := json.Unmarshal([]byte(ns.Metadata), &kns)
-		if err != nil {
-			logger.Errorln(err)
-			return
-		}
-		if len(kns.Clusters) == 0 {
-			if len(kns.ClusterMeta) > 0 {
-				for k := range kns.ClusterMeta {
-					kns.Clusters = append(kns.Clusters, k)
-				}
-			} else if g.Option.Cluster == "" {
-				logger.Warningln("You should insert cluster info!")
-				return
-			} else {
-				kns.Clusters = append(kns.Clusters, g.Option.Cluster)
-			}
-		}
+		kns := g.parserCluster(ns)
+
 		for _, cluster := range kns.Clusters {
 			if cluster == g.Option.Cluster || g.Option.Cluster == "" {
 				data := kubernetes.GetResourceBody(name, int64(0), kns.Namespace, cluster, g.Option.resource, "")
@@ -122,47 +106,51 @@ func (g *Proxy) showResourceState(name string) {
 				case JSON:
 					fmt.Println(string(stringobj.String2Json(data)))
 				case PRETTY, ROW:
-					switch g.Option.resource {
-					case model.DeploymentType, model.DaemonsetType, model.StatefulsetType:
-						pods := kubernetes.ListPods(int64(0), kns.Namespace, cluster, "?"+g.Option.resource+"="+g.Option.Option.Deployment)
-						arr := []string{}
-						for _, p := range pods.Data {
-							arr = append(arr, p.Name)
-						}
-						g.table.SetHeaders(deploymentHeader)
-						if line := g.createDeploymentLine(data, cluster); len(line) > 0 {
-							g.table.AddRow(append(line, strings.Join(arr, ",")))
-						}
-					case model.ServiceType:
-						g.table.SetHeaders(serviceHeader)
-						if line := g.createServiceLine(data, cluster); len(line) > 0 {
-							g.table.AddRow(line)
-						}
-					case model.IngressType:
-						g.table.SetHeaders(ingressHeader)
-						if line := g.createIngressLine(data, cluster); len(line) > 0 {
-							g.table.AddRow(line)
-						}
-					case model.ConfigmapType:
-						g.table.SetHeaders(configmapHeader)
-						if line := g.createConfigmapLine(data, cluster); len(line) > 0 {
-							g.table.AddRow(line)
-						}
-					case model.PodType:
-						g.table.SetHeaders(podHeader)
-						pods := kubernetes.GetPod(int64(0), kns.Namespace, cluster, g.Option.Option.Pod)
-						if line := g.createPodLine(pods.Data, cluster); len(line) > 0 {
-							g.table.AddRow(line)
-						}
-					default:
-						logger.Warningln(g.Option.resource)
-					}
+					g.createTable(data, cluster, kns.Namespace)
+				default:
+					logger.Warningln(g.Option.resource)
 				}
 			}
 		}
 	}
 	if g.Option.Output == PRETTY || g.Option.Output == ROW {
 		g.print()
+	}
+}
+
+func (g *Proxy) createTable(data []byte, cluster string, namespace string) {
+	switch g.Option.resource {
+	case model.DeploymentType, model.DaemonsetType, model.StatefulsetType:
+		pods := kubernetes.ListPods(int64(0), namespace, cluster, "?"+g.Option.resource+"="+g.Option.Option.Deployment)
+		arr := []string{}
+		for _, p := range pods.Data {
+			arr = append(arr, p.Name)
+		}
+		g.table.SetHeaders(deploymentHeader)
+		if line := g.createDeploymentLine(data, cluster); len(line) > 0 {
+			g.table.AddRow(append(line, strings.Join(arr, ",")))
+		}
+	case model.ServiceType:
+		g.table.SetHeaders(serviceHeader)
+		if line := g.createServiceLine(data, cluster); len(line) > 0 {
+			g.table.AddRow(line)
+		}
+	case model.IngressType:
+		g.table.SetHeaders(ingressHeader)
+		if line := g.createIngressLine(data, cluster); len(line) > 0 {
+			g.table.AddRow(line)
+		}
+	case model.ConfigmapType:
+		g.table.SetHeaders(configmapHeader)
+		if line := g.createConfigmapLine(data, cluster); len(line) > 0 {
+			g.table.AddRow(line)
+		}
+	case model.PodType:
+		g.table.SetHeaders(podHeader)
+		pods := kubernetes.GetPod(int64(0), namespace, cluster, g.Option.Option.Pod)
+		if line := g.createPodLine(pods.Data, cluster); len(line) > 0 {
+			g.table.AddRow(line)
+		}
 	}
 }
 
@@ -268,6 +256,27 @@ func (g *Proxy) checkNS() (list []model.Namespace) {
 	}
 	if len(list) == 0 {
 		logger.Error("Empty namespace list")
+	}
+	return
+}
+
+func (g *Proxy) parserCluster(ns model.Namespace) (kns *model.Metadata) {
+	err := json.Unmarshal([]byte(ns.Metadata), &kns)
+	if err != nil {
+		logger.Errorln(err)
+		return
+	}
+	if len(kns.Clusters) == 0 {
+		if len(kns.ClusterMeta) > 0 {
+			for k := range kns.ClusterMeta {
+				kns.Clusters = append(kns.Clusters, k)
+			}
+		} else if g.Option.Cluster == "" {
+			logger.Warningln("You should insert cluster info!")
+			return
+		} else {
+			kns.Clusters = append(kns.Clusters, g.Option.Cluster)
+		}
 	}
 	return
 }
