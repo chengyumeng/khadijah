@@ -42,10 +42,8 @@ func Login(opt Option) (err error) {
 		return err
 	}
 	logger.Infoln("Login Success!")
-	if err := config.SetUser(&config.User{opt.Username}); err != nil {
-		return err
-	}
-	return nil
+	err = config.SetUser(&config.User{opt.Username})
+	return err
 }
 
 // Clear is the interface for user clear wayne login token
@@ -54,8 +52,6 @@ func Clear() error {
 		return err
 	}
 	logger.Infoln("Logout Success!")
-	if err := config.SetUser(&config.User{""}); err != nil {
-		return err
-	}
-	return nil
+	err := config.SetUser(&config.User{""})
+	return err
 }
