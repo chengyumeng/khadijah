@@ -88,3 +88,41 @@ khadijah query getpodinfo -c=K8S-1 --label=app
   ]
 }
 ```
+
+## 原理
+
+khadijah 的工作基于 Wayne 的两个特性：
+
+- OpenAPI
+- Web API
+
+用户可以配置独立调用两种 API，在使用之前，务必配置 Wayne 服务地址,例如：
+```bash
+khadijah config set --baseurl=http://www.wayne.cloud
+```
+
+调用 OpenAPI 接口，需配置 APIKey:
+```bash
+khadijah config set --apikey=xxx
+```
+
+OpenAPI 接口的调用方式举例：
+```bash
+khadijah query getvipinfo -p=18080 
+```
+
+调用 websocket （需要安装插件）:
+```bash
+khadijah config set --websocketurl=ws://www.wayne.cloud
+```
+
+如需调用 Web API 接口，需要在 Wayne 上通过管理员设置登录密码， Wayne 设置路径为：
+
+管理后台 =》权限 =》 用户列表 =》 重置密码
+
+之后可以通过如下命令登录：
+```bash
+khadijah login -uadmin -padmin
+```
+
+恭喜你，之后就可以调用一切接口！
